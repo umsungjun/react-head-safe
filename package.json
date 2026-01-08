@@ -1,6 +1,6 @@
 {
   "name": "react-head-safe",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A CSR-only React head manager that prevents duplicate meta tags.",
   "author": "umsungjun",
   "license": "MIT",
