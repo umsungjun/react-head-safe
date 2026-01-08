@@ -2,24 +2,44 @@
   "name": "react-head-safe",
   "version": "1.0.0",
   "description": "A CSR-only React head manager that prevents duplicate meta tags.",
-  "author": "",
+  "author": "umsungjun",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/umsungjun/react-head-safe.git"
+  },
+  "bugs": {
+    "url": "https://github.com/umsungjun/react-head-safe/issues"
+  },
+  "homepage": "https://github.com/umsungjun/react-head-safe#readme",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts",
-    "prepublishOnly": "pnpm run build"
+    "build": "vite build",
+    "prepublishOnly": "pnpm run build",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\""
   },
   "peerDependencies": {
     "react": ">=17"
   },
   "devDependencies": {
+    "@types/node": "^22.10.5",
     "@types/react": "^19.2.7",
-    "tsup": "^8.5.1",
-    "typescript": "^5.9.3"
+    "prettier": "^3.7.4",
+    "typescript": "^5.9.3",
+    "vite": "^6.0.7",
+    "vite-plugin-dts": "^4.4.2"
   },
   "packageManager": "pnpm@10.5.2",
-  "keywords": ["react", "seo", "meta", "head", "csr"]
+  "keywords": [
+    "react",
+    "seo",
+    "meta",
+    "head",
+    "csr"
+  ]
 }

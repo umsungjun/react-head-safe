@@ -1,30 +1,44 @@
-import React, { useEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 
-export interface HeadProps {
+export interface ReactHeadSafeProps {
+  /** The page title that will be set in the document.title */
   title?: string;
+  /** The meta description tag content for SEO */
   description?: string;
+  /** The meta keywords tag content for SEO */
   keywords?: string;
+  /** The Open Graph title (og:title) for social media sharing */
   ogTitle?: string;
+  /** The Open Graph description (og:description) for social media sharing */
   ogDescription?: string;
+  /** The Open Graph image URL (og:image) for social media sharing */
   ogImage?: string;
-  children?: React.ReactNode;
 }
 
 /**
- * Head component that safely manages document head elements.
- * Prevents duplicate meta tags by removing existing ones before adding new ones.
- * Solves the react-helmet issue where title updates but description and keywords don't.
+ * @description
+ * A CSR-only React head manager that safely manages document head elements.
+ * Prevents duplicate meta tags by explicitly removing existing ones before adding new ones.
+ *
+ * @example
+ * <ReactHeadSafe
+ *   title="My Page Title"
+ *   description="This is the page description."
+ *   keywords="react,seo,meta tags"
+ *   ogTitle="My Page Title for Social Media"
+ *   ogDescription="This is the description for social media."
+ *   ogImage="https://example.com/image.jpg"
+ * />
  */
-export const Head: React.FC<HeadProps> = ({
+export const ReactHeadSafe: React.FC<ReactHeadSafeProps> = ({
   title,
   description,
   keywords,
   ogTitle,
   ogDescription,
   ogImage,
-  children,
 }) => {
-  useEffect(() => {
+  useLayoutEffect(() => {
     // Update title
     if (title !== undefined) {
       document.title = title;

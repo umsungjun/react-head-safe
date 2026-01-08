@@ -1,2 +1,2 @@
-export { Head } from './Head';
-export type { HeadProps } from './Head';
+export { ReactHeadSafe } from './ReactHeadSafe';
+export type { ReactHeadSafeProps } from './ReactHeadSafe';
