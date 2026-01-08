@@ -21,7 +21,8 @@
   "scripts": {
     "build": "vite build",
     "prepublishOnly": "pnpm run build",
-    "format": "prettier --write \"src/**/*.{ts,tsx}\""
+    "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "example": "cd examples/basic && pnpm install && pnpm dev"
   },
   "peerDependencies": {
     "react": ">=17"
