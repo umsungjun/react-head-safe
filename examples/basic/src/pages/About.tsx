@@ -9,7 +9,7 @@ export default function About() {
         keywords="react, head, meta, seo, csr, about, documentation"
         ogTitle="About - React Head Safe Demo"
         ogDescription="Learn more about React Head Safe and how it solves the duplicate meta tag problem in CSR applications."
-        ogImage="https://via.placeholder.com/1200x630/10b981/ffffff?text=About"
+        ogImage={`${window.location.origin}/logo.png`}
       />
 
       <div className="page-container">

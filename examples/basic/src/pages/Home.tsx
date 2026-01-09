@@ -9,7 +9,7 @@ export default function Home() {
         keywords="react, head, meta, seo, csr, home"
         ogTitle="Home - React Head Safe Demo"
         ogDescription="Welcome to React Head Safe - A CSR-only React head manager that prevents duplicate meta tags."
-        ogImage="https://via.placeholder.com/1200x630/3b82f6/ffffff?text=Home"
+        ogImage={`${window.location.origin}/logo.png`}
       />
 
       <div className="page-container">

@@ -9,7 +9,7 @@ export default function Contact() {
         keywords="react, head, meta, seo, csr, contact, github, support"
         ogTitle="Contact - React Head Safe Demo"
         ogDescription="Get in touch with the React Head Safe team. Report issues, suggest features, or contribute to the project."
-        ogImage="https://via.placeholder.com/1200x630/8b5cf6/ffffff?text=Contact"
+        ogImage={`${window.location.origin}/logo.png`}
       />
 
       <div className="page-container">
