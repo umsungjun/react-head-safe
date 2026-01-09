@@ -1,3 +1,4 @@
+// import { Helmet } from 'react-helmet-async';
 import { ReactHeadSafe } from '../../../../src';
 
 export default function About() {
@@ -9,8 +10,28 @@ export default function About() {
         keywords="react, head, meta, seo, csr, about, documentation"
         ogTitle="About - React Head Safe Demo"
         ogDescription="Learn more about React Head Safe and how it solves the duplicate meta tag problem in CSR applications."
-        ogImage="https://via.placeholder.com/1200x630/10b981/ffffff?text=About"
+        ogImage={`${window.location.origin}/logo.png`}
       />
+      {/* <Helmet>
+        <title>About - React Head Safe Demo</title>
+        <meta
+          name="description"
+          content="Learn more about React Head Safe and how it solves the duplicate meta tag problem in CSR applications."
+        />
+        <meta
+          name="keywords"
+          content="react, head, meta, seo, csr, about, documentation"
+        />
+        <meta property="og:title" content="About - React Head Safe Demo" />
+        <meta
+          property="og:description"
+          content="Learn more about React Head Safe and how it solves the duplicate meta tag problem in CSR applications."
+        />
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/logo-about.png`}
+        />
+      </Helmet> */}
 
       <div className="page-container">
         <div className="hero hero-secondary">

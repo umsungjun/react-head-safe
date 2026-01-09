@@ -1,3 +1,4 @@
+// import { Helmet } from 'react-helmet-async';
 import { ReactHeadSafe } from '../../../../src';
 
 export default function Contact() {
@@ -9,8 +10,28 @@ export default function Contact() {
         keywords="react, head, meta, seo, csr, contact, github, support"
         ogTitle="Contact - React Head Safe Demo"
         ogDescription="Get in touch with the React Head Safe team. Report issues, suggest features, or contribute to the project."
-        ogImage="https://via.placeholder.com/1200x630/8b5cf6/ffffff?text=Contact"
+        ogImage={`${window.location.origin}/logo.png`}
       />
+      {/* <Helmet>
+        <title>Contact - React Head Safe Demo</title>
+        <meta
+          name="description"
+          content="Get in touch with the React Head Safe team. Report issues, suggest features, or contribute to the project."
+        />
+        <meta
+          name="keywords"
+          content="react, head, meta, seo, csr, contact, github, support"
+        />
+        <meta property="og:title" content="Contact - React Head Safe Demo" />
+        <meta
+          property="og:description"
+          content="Get in touch with the React Head Safe team. Report issues, suggest features, or contribute to the project."
+        />
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/logo-contact.png`}
+        />
+      </Helmet> */}
 
       <div className="page-container">
         <div className="hero hero-accent">

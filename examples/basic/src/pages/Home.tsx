@@ -1,3 +1,4 @@
+// import { Helmet } from 'react-helmet-async';
 import { ReactHeadSafe } from '../../../../src';
 
 export default function Home() {
@@ -9,8 +10,25 @@ export default function Home() {
         keywords="react, head, meta, seo, csr, home"
         ogTitle="Home - React Head Safe Demo"
         ogDescription="Welcome to React Head Safe - A CSR-only React head manager that prevents duplicate meta tags."
-        ogImage="https://via.placeholder.com/1200x630/3b82f6/ffffff?text=Home"
+        ogImage={`${window.location.origin}/logo.png`}
       />
+      {/* <Helmet>
+        <title>Home - React Head Safe Demo</title>
+        <meta
+          name="description"
+          content="Welcome to React Head Safe - A CSR-only React head manager that prevents duplicate meta tags."
+        />
+        <meta name="keywords" content="react, head, meta, seo, csr, home" />
+        <meta property="og:title" content="Home - React Head Safe Demo" />
+        <meta
+          property="og:description"
+          content="Welcome to React Head Safe - A CSR-only React head manager that prevents duplicate meta tags."
+        />
+        <meta
+          property="og:image"
+          content={`${window.location.origin}/logo.png`}
+        />
+      </Helmet> */}
 
       <div className="page-container">
         <div className="hero">
