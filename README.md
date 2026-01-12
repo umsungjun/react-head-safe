@@ -22,6 +22,8 @@ A lightweight, CSR-focused alternative for managing document head elements in Re
 
 ## Installation
 
+[![npm version](https://badge.fury.io/js/react-head-safe.svg)](https://www.npmjs.com/package/react-head-safe)
+
 ```bash
 npm install react-head-safe
 # or
@@ -88,9 +90,19 @@ This library is specifically designed for **Client-Side Rendering (CSR)** applic
 - Next.js built-in `<Head>` component
 - Remix `<Meta>` component
 
+## Local Development
+
+To test your local changes with the example application:
+
+```bash
+pnpm run example
+```
+
+This command will run the example project using your local version of the library, allowing you to test any modifications you've made before publishing.
+
 ## License
 
-MIT
+[MIT](LICENSE)
 
 ## Contributing
 
