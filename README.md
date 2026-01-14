@@ -1,5 +1,7 @@
 # react-head-safe
 
+[English](README.md) | [한국어](README.ko.md)
+
 A CSR-only React head manager that prevents duplicate meta tags and safely manages document head elements.
 
 ## Why react-head-safe?
@@ -97,6 +99,39 @@ To test your local changes with the example application:
 ```bash
 pnpm run example
 ```
+
+## Testing
+
+[![codecov](https://codecov.io/gh/umsungjun/react-head-safe/branch/main/graph/badge.svg)](https://codecov.io/gh/umsungjun/react-head-safe)
+
+This project uses **Vitest** and **React Testing Library** for unit testing.
+
+### Running Tests
+
+```bash
+# Run tests once
+pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test:coverage
+
+# Run tests with UI
+pnpm test:ui
+```
+
+### CI/CD
+
+The project uses GitHub Actions for continuous integration:
+
+- ✅ **Automated Testing** - Tests run on every PR and push to main
+- ✅ **Node.js 20.x** - Tests against Node.js 20.x (LTS)
+- ✅ **Build Verification** - Ensures the package builds correctly
+- ✅ **Branch Protection** - Tests must pass before merging to main
+
+All tests must pass before a PR can be merged to the main branch.
 
 This command will run the example project using your local version of the library, allowing you to test any modifications you've made before publishing.
 
