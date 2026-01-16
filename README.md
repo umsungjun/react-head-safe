@@ -1,8 +1,14 @@
 # react-head-safe
 
+[![npm version](https://badge.fury.io/js/react-head-safe.svg)](https://www.npmjs.com/package/react-head-safe)
+[![npm downloads](https://img.shields.io/npm/dm/react-head-safe.svg)](https://www.npmjs.com/package/react-head-safe)
+[![codecov](https://codecov.io/gh/umsungjun/react-head-safe/branch/main/graph/badge.svg)](https://codecov.io/gh/umsungjun/react-head-safe)
+
 [English](README.md) | [한국어](README.ko.md)
 
-A CSR-only React head manager that prevents duplicate meta tags and safely manages document head elements.
+**A lightweight React head manager for client-side rendering (CSR) applications.**
+
+Safely manage document title, meta tags, Open Graph tags, and SEO metadata without duplicates. Perfect for React SPAs, Vite, and Create React App projects.
 
 ## Why react-head-safe?
 
@@ -24,7 +30,7 @@ A lightweight, CSR-focused alternative for managing document head elements in Re
 
 ## Installation
 
-[![npm version](https://badge.fury.io/js/react-head-safe.svg)](https://www.npmjs.com/package/react-head-safe)
+Install via npm, yarn, or pnpm:
 
 ```bash
 npm install react-head-safe
@@ -34,7 +40,11 @@ yarn add react-head-safe
 pnpm add react-head-safe
 ```
 
-## Usage
+Zero dependencies required (React is a peer dependency).
+
+## Quick Start
+
+Simply import and use the `ReactHeadSafe` component in your React pages:
 
 ```tsx
 import { ReactHeadSafe } from 'react-head-safe';
@@ -56,7 +66,14 @@ function MyPage() {
 }
 ```
 
-## API
+That's it! The component will automatically:
+
+- Set the document title
+- Add/update meta description and keywords
+- Add/update Open Graph tags for social media
+- Remove any duplicate tags
+
+## API Reference
 
 ### ReactHeadSafeProps
 
@@ -69,29 +86,6 @@ function MyPage() {
 | `ogDescription` | `string` | The Open Graph description (og:description) for social media sharing |
 | `ogImage`       | `string` | The Open Graph image URL (og:image) for social media sharing         |
 
-## When to Use
-
-**Use react-head-safe if:**
-
-- You're building a CSR-only application (Create React App, Vite, etc.)
-- You want a simple, lightweight solution with minimal setup
-- You need explicit control over duplicate meta tag prevention
-- You prefer `useLayoutEffect` for synchronous DOM updates
-
-**Use alternatives if:**
-
-- You need SSR/SSG support → use `react-helmet-async`, Next.js `<Head>`, or Remix `<Meta>`
-- You need advanced features like nested components or deduplication logic
-- You're already using a framework with built-in head management
-
-## Why CSR Only?
-
-This library is specifically designed for **Client-Side Rendering (CSR)** applications. If you need Server-Side Rendering (SSR) support, consider using:
-
-- `react-helmet-async` for SSR
-- Next.js built-in `<Head>` component
-- Remix `<Meta>` component
-
 ## Local Development
 
 To test your local changes with the example application:
@@ -102,9 +96,7 @@ pnpm run example
 
 ## Testing
 
-[![codecov](https://codecov.io/gh/umsungjun/react-head-safe/branch/main/graph/badge.svg)](https://codecov.io/gh/umsungjun/react-head-safe)
-
-This project uses **Vitest** and **React Testing Library** for unit testing.
+This project uses **Vitest** and **React Testing Library** for comprehensive unit testing with high code coverage.
 
 ### Running Tests
 
@@ -122,23 +114,30 @@ pnpm test:coverage
 pnpm test:ui
 ```
 
-### CI/CD
-
-The project uses GitHub Actions for continuous integration:
-
-- ✅ **Automated Testing** - Tests run on every PR and push to main
-- ✅ **Node.js 20.x** - Tests against Node.js 20.x (LTS)
-- ✅ **Build Verification** - Ensures the package builds correctly
-- ✅ **Branch Protection** - Tests must pass before merging to main
-
-All tests must pass before a PR can be merged to the main branch.
-
-This command will run the example project using your local version of the library, allowing you to test any modifications you've made before publishing.
-
-## License
-
-[MIT](LICENSE)
-
 ## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
+
+### Development
+
+```bash
+# Install dependencies
+pnpm install
+
+# Run tests
+pnpm test
+
+# Build the library
+pnpm build
+
+# Run example app
+pnpm example
+```
+
+## License
+
+[MIT](LICENSE) © [umsungjun](https://github.com/umsungjun)
+
+---
+
+**Keywords:** react head manager, react meta tags, react seo, open graph react, react helmet alternative, csr meta tags, spa seo, client-side rendering seo, react document head, vite meta tags
