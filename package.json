@@ -1,7 +1,7 @@
 {
   "name": "react-head-safe",
   "version": "1.0.1",
-  "description": "A CSR-only React head manager that prevents duplicate meta tags.",
+  "description": "A lightweight React head manager for CSR apps. Safely manage document title, meta tags, Open Graph, and SEO metadata without duplicates. TypeScript support included.",
   "author": "umsungjun",
   "license": "MIT",
   "repository": {
@@ -49,9 +49,30 @@
   "packageManager": "pnpm@10.5.2",
   "keywords": [
     "react",
+    "react-head",
+    "react-helmet",
+    "react-helmet-async",
     "seo",
+    "meta-tags",
     "meta",
     "head",
-    "csr"
+    "head-manager",
+    "document-head",
+    "document-title",
+    "open-graph",
+    "og-tags",
+    "social-media",
+    "spa",
+    "csr",
+    "client-side-rendering",
+    "typescript",
+    "vite",
+    "create-react-app",
+    "duplicate-prevention",
+    "page-metadata",
+    "seo-optimization",
+    "react-seo",
+    "meta-description",
+    "react-component"
   ]
 }
