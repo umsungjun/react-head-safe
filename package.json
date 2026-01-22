@@ -1,6 +1,6 @@
 {
   "name": "react-head-safe",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A lightweight React head manager for CSR apps. Safely manage document title, meta tags, Open Graph, and SEO metadata without duplicates. TypeScript support included.",
   "author": "umsungjun",
   "license": "MIT",
