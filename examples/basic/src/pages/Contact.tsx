@@ -10,6 +10,8 @@ export default function Contact() {
         ogTitle="Contact - React Head Safe Demo"
         ogDescription="Get in touch with the React Head Safe team. Report issues, suggest features, or contribute to the project."
         ogImage={`${window.location.origin}/logo.png`}
+        ogUrl={window.location.href}
+        ogType="website"
       />
 
       <div className="page-container">

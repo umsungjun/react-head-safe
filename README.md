@@ -59,6 +59,8 @@ function MyPage() {
         ogTitle="My Page Title for Social Media"
         ogDescription="This is the description for social media."
         ogImage="https://example.com/image.jpg"
+        ogUrl="https://example.com/page"
+        ogType="website"
       />
       <div>Your page content...</div>
     </>
@@ -77,14 +79,16 @@ That's it! The component will automatically:
 
 ### ReactHeadSafeProps
 
-| Prop            | Type     | Description                                                          |
-| --------------- | -------- | -------------------------------------------------------------------- |
-| `title`         | `string` | The page title that will be set in the `document.title`              |
-| `description`   | `string` | The meta description tag content for SEO                             |
-| `keywords`      | `string` | The meta keywords tag content for SEO                                |
-| `ogTitle`       | `string` | The Open Graph title (og:title) for social media sharing             |
-| `ogDescription` | `string` | The Open Graph description (og:description) for social media sharing |
-| `ogImage`       | `string` | The Open Graph image URL (og:image) for social media sharing         |
+| Prop            | Type     | Description                                                                                  |
+| --------------- | -------- | -------------------------------------------------------------------------------------------- |
+| `title`         | `string` | The page title that will be set in the `document.title`                                      |
+| `description`   | `string` | The meta description tag content for SEO                                                     |
+| `keywords`      | `string` | The meta keywords tag content for SEO                                                        |
+| `ogTitle`       | `string` | The Open Graph title (og:title) for social media sharing                                     |
+| `ogDescription` | `string` | The Open Graph description (og:description) for social media sharing                         |
+| `ogImage`       | `string` | The Open Graph image URL (og:image) for social media sharing                                 |
+| `ogUrl`         | `string` | The canonical URL of your object that will be used as its permanent ID in the graph (og:url) |
+| `ogType`        | `string` | The type of your object, e.g., "website", "article" (og:type)                                |
 
 ## Local Development
 
