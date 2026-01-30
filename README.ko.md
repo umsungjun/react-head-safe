@@ -59,6 +59,8 @@ function MyPage() {
         ogTitle="My Page Title for Social Media"
         ogDescription="This is the description for social media."
         ogImage="https://example.com/image.jpg"
+        ogUrl="https://example.com/page"
+        ogType="website"
       />
       <div>Your page content...</div>
     </>
@@ -77,14 +79,16 @@ function MyPage() {
 
 ### ReactHeadSafeProps
 
-| Prop            | Type     | Description                                              |
-| --------------- | -------- | -------------------------------------------------------- |
-| `title`         | `string` | `document.title`에 설정될 페이지 제목                    |
-| `description`   | `string` | SEO를 위한 메타 설명 태그 콘텐츠                         |
-| `keywords`      | `string` | SEO를 위한 메타 키워드 태그 콘텐츠                       |
-| `ogTitle`       | `string` | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)       |
-| `ogDescription` | `string` | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description) |
-| `ogImage`       | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image) |
+| Prop            | Type     | Description                                                                 |
+| --------------- | -------- | --------------------------------------------------------------------------- |
+| `title`         | `string` | `document.title`에 설정될 페이지 제목                                       |
+| `description`   | `string` | SEO를 위한 메타 설명 태그 콘텐츠                                            |
+| `keywords`      | `string` | SEO를 위한 메타 키워드 태그 콘텐츠                                          |
+| `ogTitle`       | `string` | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)                          |
+| `ogDescription` | `string` | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description)                    |
+| `ogImage`       | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                    |
+| `ogUrl`         | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                             |
+| `ogType`        | `string` | 소셜 미디어 공유를 위한 Open Graph 타입, 예: "website", "article" (og:type) |
 
 ## 로컬 개발
 

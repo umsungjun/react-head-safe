@@ -11,4 +11,8 @@ export interface ReactHeadSafeProps {
   ogDescription?: string;
   /** The Open Graph image URL (og:image) for social media sharing */
   ogImage?: string;
+  /** The canonical URL of your object that will be used as its permanent ID in the graph (og:url) */
+  ogUrl?: string;
+  /** The type of your object, e.g., "website", "article" (og:type) */
+  ogType?: string;
 }

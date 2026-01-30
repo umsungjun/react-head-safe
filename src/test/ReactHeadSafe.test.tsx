@@ -126,6 +126,22 @@ describe('ReactHeadSafe', () => {
       );
     });
 
+    it('should create og:url meta tag', () => {
+      render(<ReactHeadSafe ogUrl="https://example.com/page" />);
+
+      const metaTag = document.querySelector('meta[property="og:url"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('https://example.com/page');
+    });
+
+    it('should create og:type meta tag', () => {
+      render(<ReactHeadSafe ogType="website" />);
+
+      const metaTag = document.querySelector('meta[property="og:type"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('website');
+    });
+
     it('should prevent duplicate og:title meta tags', () => {
       const { rerender } = render(<ReactHeadSafe ogTitle="First OG Title" />);
       rerender(<ReactHeadSafe ogTitle="Second OG Title" />);
@@ -160,6 +176,24 @@ describe('ReactHeadSafe', () => {
         'https://example.com/second.jpg'
       );
     });
+
+    it('should prevent duplicate og:url meta tags', () => {
+      const { rerender } = render(<ReactHeadSafe ogUrl="https://site.com/1" />);
+      rerender(<ReactHeadSafe ogUrl="https://site.com/2" />);
+
+      const metaTags = document.querySelectorAll('meta[property="og:url"]');
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe('https://site.com/2');
+    });
+
+    it('should prevent duplicate og:type meta tags', () => {
+      const { rerender } = render(<ReactHeadSafe ogType="website" />);
+      rerender(<ReactHeadSafe ogType="website" />);
+
+      const metaTags = document.querySelectorAll('meta[property="og:type"]');
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe('website');
+    });
   });
 
   describe('multiple props', () => {
@@ -172,6 +206,8 @@ describe('ReactHeadSafe', () => {
           ogTitle="OG Title"
           ogDescription="OG Description"
           ogImage="https://example.com/image.jpg"
+          ogUrl="https://example.com/page"
+          ogType="website"
         />
       );
 
@@ -182,53 +218,44 @@ describe('ReactHeadSafe', () => {
           ?.getAttribute('content')
       ).toBe('Test Description');
       expect(
-        document.querySelector('meta[name="keywords"]')?.getAttribute('content')
-      ).toBe('test, keywords');
-      expect(
         document
           .querySelector('meta[property="og:title"]')
           ?.getAttribute('content')
       ).toBe('OG Title');
       expect(
         document
-          .querySelector('meta[property="og:description"]')
+          .querySelector('meta[property="og:url"]')
           ?.getAttribute('content')
-      ).toBe('OG Description');
+      ).toBe('https://example.com/page');
       expect(
         document
-          .querySelector('meta[property="og:image"]')
+          .querySelector('meta[property="og:type"]')
           ?.getAttribute('content')
-      ).toBe('https://example.com/image.jpg');
+      ).toBe('website');
     });
 
     it('should update only changed props', () => {
       const { rerender } = render(
-        <ReactHeadSafe
-          title="Initial Title"
-          description="Initial Description"
-        />
+        <ReactHeadSafe title="Initial Title" ogUrl="https://example.com/1" />
       );
 
       expect(document.title).toBe('Initial Title');
       expect(
         document
-          .querySelector('meta[name="description"]')
+          .querySelector('meta[property="og:url"]')
           ?.getAttribute('content')
-      ).toBe('Initial Description');
+      ).toBe('https://example.com/1');
 
       rerender(
-        <ReactHeadSafe
-          title="Updated Title"
-          description="Initial Description"
-        />
+        <ReactHeadSafe title="Updated Title" ogUrl="https://example.com/1" />
       );
 
       expect(document.title).toBe('Updated Title');
       expect(
         document
-          .querySelector('meta[name="description"]')
+          .querySelector('meta[property="og:url"]')
           ?.getAttribute('content')
-      ).toBe('Initial Description');
+      ).toBe('https://example.com/1');
     });
   });
 

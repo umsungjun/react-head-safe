@@ -14,6 +14,8 @@ import { type ReactHeadSafeProps } from './types';
  *   ogTitle="My Page Title for Social Media"
  *   ogDescription="This is the description for social media."
  *   ogImage="https://example.com/image.jpg"
+ *   ogUrl="https://example.com/page"
+ *   ogType="website"
  * />
  */
 export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
@@ -23,6 +25,8 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
   ogTitle,
   ogDescription,
   ogImage,
+  ogUrl,
+  ogType,
 }) => {
   useLayoutEffect(() => {
     // Update title
@@ -52,7 +56,24 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
     if (ogImage !== undefined) {
       updateMetaTag('property', 'og:image', ogImage);
     }
-  }, [title, description, keywords, ogTitle, ogDescription, ogImage]);
+
+    if (ogUrl !== undefined) {
+      updateMetaTag('property', 'og:url', ogUrl);
+    }
+
+    if (ogType !== undefined) {
+      updateMetaTag('property', 'og:type', ogType);
+    }
+  }, [
+    title,
+    description,
+    keywords,
+    ogTitle,
+    ogDescription,
+    ogImage,
+    ogUrl,
+    ogType,
+  ]);
 
   return null;
 };

@@ -10,6 +10,8 @@ export default function Home() {
         ogTitle="Home - React Head Safe Demo"
         ogDescription="Welcome to React Head Safe - A CSR-only React head manager that prevents duplicate meta tags."
         ogImage={`${window.location.origin}/logo.png`}
+        ogUrl={window.location.href}
+        ogType="website"
       />
 
       <div className="page-container">
