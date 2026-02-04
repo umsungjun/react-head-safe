@@ -196,6 +196,143 @@ describe('ReactHeadSafe', () => {
     });
   });
 
+  describe('Twitter tags', () => {
+    it('should create twitter:title meta tag when ogTitle is set', () => {
+      render(<ReactHeadSafe ogTitle="Twitter Test Title" />);
+
+      const metaTag = document.querySelector('meta[name="twitter:title"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('Twitter Test Title');
+    });
+
+    it('should create twitter:description meta tag when ogDescription is set', () => {
+      render(<ReactHeadSafe ogDescription="Twitter Test Description" />);
+
+      const metaTag = document.querySelector(
+        'meta[name="twitter:description"]'
+      );
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('Twitter Test Description');
+    });
+
+    it('should create twitter:image meta tag when ogImage is set', () => {
+      render(<ReactHeadSafe ogImage="https://example.com/twitter-image.jpg" />);
+
+      const metaTag = document.querySelector('meta[name="twitter:image"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe(
+        'https://example.com/twitter-image.jpg'
+      );
+    });
+
+    it('should create twitter:card meta tag with summary_large_image when ogImage is set', () => {
+      render(<ReactHeadSafe ogImage="https://example.com/image.jpg" />);
+
+      const metaTag = document.querySelector('meta[name="twitter:card"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('summary_large_image');
+    });
+
+    it('should prevent duplicate twitter:title meta tags', () => {
+      const { rerender } = render(
+        <ReactHeadSafe ogTitle="First Twitter Title" />
+      );
+      rerender(<ReactHeadSafe ogTitle="Second Twitter Title" />);
+
+      const metaTags = document.querySelectorAll('meta[name="twitter:title"]');
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe('Second Twitter Title');
+    });
+
+    it('should prevent duplicate twitter:description meta tags', () => {
+      const { rerender } = render(
+        <ReactHeadSafe ogDescription="First Twitter Description" />
+      );
+      rerender(<ReactHeadSafe ogDescription="Second Twitter Description" />);
+
+      const metaTags = document.querySelectorAll(
+        'meta[name="twitter:description"]'
+      );
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe(
+        'Second Twitter Description'
+      );
+    });
+
+    it('should prevent duplicate twitter:image meta tags', () => {
+      const { rerender } = render(
+        <ReactHeadSafe ogImage="https://example.com/first.jpg" />
+      );
+      rerender(<ReactHeadSafe ogImage="https://example.com/second.jpg" />);
+
+      const metaTags = document.querySelectorAll('meta[name="twitter:image"]');
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe(
+        'https://example.com/second.jpg'
+      );
+    });
+
+    it('should prevent duplicate twitter:card meta tags', () => {
+      const { rerender } = render(
+        <ReactHeadSafe ogImage="https://example.com/first.jpg" />
+      );
+      rerender(<ReactHeadSafe ogImage="https://example.com/second.jpg" />);
+
+      const metaTags = document.querySelectorAll('meta[name="twitter:card"]');
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe('summary_large_image');
+    });
+
+    it('should set both og and twitter tags together', () => {
+      render(
+        <ReactHeadSafe
+          ogTitle="Shared Title"
+          ogDescription="Shared Description"
+          ogImage="https://example.com/shared.jpg"
+        />
+      );
+
+      // OG tags
+      expect(
+        document
+          .querySelector('meta[property="og:title"]')
+          ?.getAttribute('content')
+      ).toBe('Shared Title');
+      expect(
+        document
+          .querySelector('meta[property="og:description"]')
+          ?.getAttribute('content')
+      ).toBe('Shared Description');
+      expect(
+        document
+          .querySelector('meta[property="og:image"]')
+          ?.getAttribute('content')
+      ).toBe('https://example.com/shared.jpg');
+
+      // Twitter tags
+      expect(
+        document
+          .querySelector('meta[name="twitter:title"]')
+          ?.getAttribute('content')
+      ).toBe('Shared Title');
+      expect(
+        document
+          .querySelector('meta[name="twitter:description"]')
+          ?.getAttribute('content')
+      ).toBe('Shared Description');
+      expect(
+        document
+          .querySelector('meta[name="twitter:image"]')
+          ?.getAttribute('content')
+      ).toBe('https://example.com/shared.jpg');
+      expect(
+        document
+          .querySelector('meta[name="twitter:card"]')
+          ?.getAttribute('content')
+      ).toBe('summary_large_image');
+    });
+  });
+
   describe('multiple props', () => {
     it('should handle all props together', () => {
       render(
