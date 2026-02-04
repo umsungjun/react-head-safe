@@ -26,6 +26,7 @@ React에서 document head 요소를 관리하기 위한 가볍고 CSR에 최적�
 - ✅ **경량** - React 외에 의존성 제로
 - ✅ **CSR 최적화** - 동기적 DOM 업데이트를 위해 `useLayoutEffect` 사용
 - ✅ **Open Graph 지원** - 소셜 미디어 메타 태그 기본 지원
+- ✅ **Twitter Card 지원** - Open Graph 태그 설정 시 Twitter 태그 자동 생성
 - ✅ **간단한 API** - props만 전달하면 되는 복잡하지 않은 설정
 
 ## 설치
@@ -73,6 +74,7 @@ function MyPage() {
 - document title 설정
 - meta description과 keywords 추가/업데이트
 - 소셜 미디어용 Open Graph 태그 추가/업데이트
+- Twitter Card 태그 추가/업데이트 (Open Graph 태그에서 자동 생성)
 - 중복 태그 제거
 
 ## API 레퍼런스
@@ -89,6 +91,16 @@ function MyPage() {
 | `ogImage`       | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                    |
 | `ogUrl`         | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                             |
 | `ogType`        | `string` | 소셜 미디어 공유를 위한 Open Graph 타입, 예: "website", "article" (og:type) |
+
+### Twitter Card 지원
+
+Open Graph 태그를 설정하면 해당하는 Twitter Card 태그가 자동으로 생성됩니다:
+
+| Open Graph Prop | 생성되는 Twitter 태그 |
+| --------------- | --------------------- |
+| `ogTitle`       | `twitter:title`       |
+| `ogDescription` | `twitter:description` |
+| `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
 
 ## 로컬 개발
 
