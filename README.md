@@ -26,6 +26,7 @@ A lightweight, CSR-focused alternative for managing document head elements in Re
 - ✅ **Lightweight** - Zero dependencies except React
 - ✅ **CSR Optimized** - Uses `useLayoutEffect` for synchronous DOM updates
 - ✅ **Open Graph Support** - Built-in support for social media meta tags
+- ✅ **Twitter Card Support** - Automatically sets Twitter tags when Open Graph tags are provided
 - ✅ **Simple API** - Just pass props, no complex configuration
 
 ## Installation
@@ -73,6 +74,7 @@ That's it! The component will automatically:
 - Set the document title
 - Add/update meta description and keywords
 - Add/update Open Graph tags for social media
+- Add/update Twitter Card tags (automatically generated from Open Graph tags)
 - Remove any duplicate tags
 
 ## API Reference
@@ -89,6 +91,16 @@ That's it! The component will automatically:
 | `ogImage`       | `string` | The Open Graph image URL (og:image) for social media sharing                                 |
 | `ogUrl`         | `string` | The canonical URL of your object that will be used as its permanent ID in the graph (og:url) |
 | `ogType`        | `string` | The type of your object, e.g., "website", "article" (og:type)                                |
+
+### Twitter Card Support
+
+When you set Open Graph tags, the corresponding Twitter Card tags are automatically generated:
+
+| Open Graph Prop | Twitter Tag Generated |
+| --------------- | --------------------- |
+| `ogTitle`       | `twitter:title`       |
+| `ogDescription` | `twitter:description` |
+| `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
 
 ## Local Development
 

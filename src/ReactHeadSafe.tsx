@@ -44,17 +44,21 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
       updateMetaTag('name', 'keywords', keywords);
     }
 
-    // Update Open Graph tags
+    // Update Open Graph tags and Twitter tags
     if (ogTitle !== undefined) {
       updateMetaTag('property', 'og:title', ogTitle);
+      updateMetaTag('name', 'twitter:title', ogTitle);
     }
 
     if (ogDescription !== undefined) {
       updateMetaTag('property', 'og:description', ogDescription);
+      updateMetaTag('name', 'twitter:description', ogDescription);
     }
 
     if (ogImage !== undefined) {
       updateMetaTag('property', 'og:image', ogImage);
+      updateMetaTag('name', 'twitter:image', ogImage);
+      updateMetaTag('name', 'twitter:card', 'summary_large_image');
     }
 
     if (ogUrl !== undefined) {
