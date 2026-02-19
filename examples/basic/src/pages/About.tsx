@@ -53,17 +53,21 @@ export default function About() {
           <section className="info-section">
             <h2>Usage Example</h2>
             <pre className="code-block">
-              <code>{`import ReactHeadSafe from 'react-head-safe';
+              <code>{`import { ReactHeadSafe } from 'react-head-safe';
 
 function MyPage() {
   return (
     <>
-      <ReactHeadSafe>
-        <title>My Page Title</title>
-        <meta name="description" content="Page description" />
-        <meta property="og:title" content="My Page Title" />
-      </ReactHeadSafe>
-      
+      <ReactHeadSafe
+        title="My Page Title"
+        description="Page description"
+        ogTitle="My Page Title"
+        ogDescription="Page description"
+        ogImage="https://example.com/image.jpg"
+        ogUrl="https://example.com/page"
+        ogType="website"
+      />
+
       <div>Your page content here</div>
     </>
   );
