@@ -12,6 +12,7 @@ export default function Contact() {
         ogImage={`${window.location.origin}/logo.png`}
         ogUrl={window.location.href}
         ogType="website"
+        canonicalUrl={window.location.href}
       />
 
       <div className="page-container">
