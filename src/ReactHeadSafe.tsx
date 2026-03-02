@@ -16,6 +16,7 @@ import { type ReactHeadSafeProps } from './types';
  *   ogImage="https://example.com/image.jpg"
  *   ogUrl="https://example.com/page"
  *   ogType="website"
+ *   canonicalUrl="https://example.com/page"
  * />
  */
 export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
@@ -27,6 +28,7 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
   ogImage,
   ogUrl,
   ogType,
+  canonicalUrl,
 }) => {
   useLayoutEffect(() => {
     // Update title
@@ -68,6 +70,11 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
     if (ogType !== undefined) {
       updateMetaTag('property', 'og:type', ogType);
     }
+
+    // Update canonical URL
+    if (canonicalUrl !== undefined) {
+      updateLinkTag('canonical', canonicalUrl);
+    }
   }, [
     title,
     description,
@@ -77,10 +84,27 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
     ogImage,
     ogUrl,
     ogType,
+    canonicalUrl,
   ]);
 
   return null;
 };
+
+/**
+ * Updates or creates a link tag in the document head.
+ * Removes existing tag with the same rel to prevent duplicates.
+ */
+function updateLinkTag(rel: string, href: string): void {
+  const existingTag = document.querySelector(`link[rel="${rel}"]`);
+  if (existingTag) {
+    existingTag.remove();
+  }
+
+  const linkTag = document.createElement('link');
+  linkTag.setAttribute('rel', rel);
+  linkTag.setAttribute('href', href);
+  document.head.appendChild(linkTag);
+}
 
 /**
  * Updates or creates a meta tag in the document head.

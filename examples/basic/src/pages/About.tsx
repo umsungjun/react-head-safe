@@ -12,6 +12,7 @@ export default function About() {
         ogImage={`${window.location.origin}/logo.png`}
         ogUrl={window.location.href}
         ogType="website"
+        canonicalUrl={window.location.href}
       />
 
       <div className="page-container">
@@ -66,6 +67,7 @@ function MyPage() {
         ogImage="https://example.com/image.jpg"
         ogUrl="https://example.com/page"
         ogType="website"
+        canonicalUrl="https://example.com/page"
       />
 
       <div>Your page content here</div>

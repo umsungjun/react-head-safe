@@ -62,6 +62,7 @@ function MyPage() {
         ogImage="https://example.com/image.jpg"
         ogUrl="https://example.com/page"
         ogType="website"
+        canonicalUrl="https://example.com/page"
       />
       <div>Your page content...</div>
     </>
@@ -75,6 +76,7 @@ function MyPage() {
 - meta description과 keywords 추가/업데이트
 - 소셜 미디어용 Open Graph 태그 추가/업데이트
 - Twitter Card 태그 추가/업데이트 (Open Graph 태그에서 자동 생성)
+- canonical URL 링크 태그 추가/업데이트
 - 중복 태그 제거
 
 ## API 레퍼런스
@@ -91,6 +93,7 @@ function MyPage() {
 | `ogImage`       | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                    |
 | `ogUrl`         | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                             |
 | `ogType`        | `string` | 소셜 미디어 공유를 위한 Open Graph 타입, 예: "website", "article" (og:type) |
+| `canonicalUrl`  | `string` | SEO를 위한 페이지의 대표 URL (`<link rel="canonical">`)                     |
 
 ### Twitter Card 지원
 

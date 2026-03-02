@@ -62,6 +62,7 @@ function MyPage() {
         ogImage="https://example.com/image.jpg"
         ogUrl="https://example.com/page"
         ogType="website"
+        canonicalUrl="https://example.com/page"
       />
       <div>Your page content...</div>
     </>
@@ -75,6 +76,7 @@ That's it! The component will automatically:
 - Add/update meta description and keywords
 - Add/update Open Graph tags for social media
 - Add/update Twitter Card tags (automatically generated from Open Graph tags)
+- Add/update the canonical URL link tag
 - Remove any duplicate tags
 
 ## API Reference
@@ -91,6 +93,7 @@ That's it! The component will automatically:
 | `ogImage`       | `string` | The Open Graph image URL (og:image) for social media sharing                                 |
 | `ogUrl`         | `string` | The canonical URL of your object that will be used as its permanent ID in the graph (og:url) |
 | `ogType`        | `string` | The type of your object, e.g., "website", "article" (og:type)                                |
+| `canonicalUrl`  | `string` | The canonical URL of the page for SEO (`<link rel="canonical">`)                             |
 
 ### Twitter Card Support
 

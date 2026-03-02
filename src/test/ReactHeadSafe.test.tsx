@@ -333,6 +333,43 @@ describe('ReactHeadSafe', () => {
     });
   });
 
+  describe('canonical URL', () => {
+    it('should create link rel="canonical" tag', () => {
+      render(<ReactHeadSafe canonicalUrl="https://example.com/page" />);
+
+      const linkTag = document.querySelector('link[rel="canonical"]');
+      expect(linkTag).toBeInTheDocument();
+      expect(linkTag?.getAttribute('href')).toBe('https://example.com/page');
+    });
+
+    it('should update canonical URL when prop changes', () => {
+      const { rerender } = render(
+        <ReactHeadSafe canonicalUrl="https://example.com/page-1" />
+      );
+
+      let linkTag = document.querySelector('link[rel="canonical"]');
+      expect(linkTag?.getAttribute('href')).toBe('https://example.com/page-1');
+
+      rerender(<ReactHeadSafe canonicalUrl="https://example.com/page-2" />);
+
+      linkTag = document.querySelector('link[rel="canonical"]');
+      expect(linkTag?.getAttribute('href')).toBe('https://example.com/page-2');
+    });
+
+    it('should prevent duplicate canonical link tags', () => {
+      const { rerender } = render(
+        <ReactHeadSafe canonicalUrl="https://example.com/first" />
+      );
+      rerender(<ReactHeadSafe canonicalUrl="https://example.com/second" />);
+
+      const linkTags = document.querySelectorAll('link[rel="canonical"]');
+      expect(linkTags).toHaveLength(1);
+      expect(linkTags[0].getAttribute('href')).toBe(
+        'https://example.com/second'
+      );
+    });
+  });
+
   describe('multiple props', () => {
     it('should handle all props together', () => {
       render(
@@ -345,6 +382,7 @@ describe('ReactHeadSafe', () => {
           ogImage="https://example.com/image.jpg"
           ogUrl="https://example.com/page"
           ogType="website"
+          canonicalUrl="https://example.com/page"
         />
       );
 
@@ -369,6 +407,11 @@ describe('ReactHeadSafe', () => {
           .querySelector('meta[property="og:type"]')
           ?.getAttribute('content')
       ).toBe('website');
+      expect(
+        document
+          .querySelector('link[rel="canonical"]')
+          ?.getAttribute('href')
+      ).toBe('https://example.com/page');
     });
 
     it('should update only changed props', () => {

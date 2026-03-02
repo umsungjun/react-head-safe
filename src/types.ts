@@ -15,4 +15,6 @@ export interface ReactHeadSafeProps {
   ogUrl?: string;
   /** The type of your object, e.g., "website", "article" (og:type) */
   ogType?: string;
+  /** The canonical URL of the page for SEO (link rel="canonical") */
+  canonicalUrl?: string;
 }
