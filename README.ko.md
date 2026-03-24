@@ -10,6 +10,38 @@
 
 중복 없이 document title, meta 태그, Open Graph 태그, SEO 메타데이터를 안전하게 관리합니다. React SPA, Vite, Create React App 프로젝트에 완벽합니다.
 
+## 중요: CSR 애플리케이션에서의 SEO
+
+CSR 앱은 클라이언트에서 JavaScript를 실행하기 때문에, 검색 엔진 크롤러와 소셜 미디어 봇이 JavaScript를 실행하지 못할 수 있습니다. 이 경우 **동적으로 주입된 메타 태그가 인식되지 않을 수 있습니다.**
+
+최적의 SEO를 위해 `index.html`에 항상 기본 메타 태그를 설정하세요:
+
+```html
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <!-- JavaScript를 실행하지 않는 크롤러를 위한 기본 메타 태그 -->
+    <title>My App</title>
+    <meta name="description" content="앱에 대한 기본 설명입니다." />
+    <meta property="og:title" content="My App" />
+    <meta property="og:description" content="앱에 대한 기본 설명입니다." />
+    <meta property="og:image" content="https://example.com/default-image.jpg" />
+    <meta property="og:url" content="https://example.com" />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://example.com" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+`react-head-safe`는 JavaScript가 실행될 때 **이 기본값을 런타임에 덮어씁니다.** 이 두 단계 접근 방식은 다음을 보장합니다:
+
+1. **JS를 실행하지 않는 크롤러**는 `index.html`의 기본 메타 태그를 인식
+2. **JS를 실행하는 크롤러** (예: Googlebot)와 **사용자**는 `react-head-safe`가 설정한 페이지별 메타 태그를 인식
+
 ## 왜 react-head-safe인가요?
 
 React에서 document head 요소를 관리하기 위한 가볍고 CSR에 최적화된 대안입니다. 다음과 같은 요구사항이 있는 간단한 클라이언트 사이드 렌더링 애플리케이션에 완벽합니다:

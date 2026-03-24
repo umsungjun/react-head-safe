@@ -10,6 +10,38 @@
 
 Safely manage document title, meta tags, Open Graph tags, and SEO metadata without duplicates. Perfect for React SPAs, Vite, and Create React App projects.
 
+## Important: SEO in CSR Applications
+
+Since CSR apps run JavaScript on the client side, search engine crawlers and social media bots may not execute your JavaScript. This means **dynamically injected meta tags might not be recognized**.
+
+For optimal SEO, always set default meta tags directly in your `index.html`:
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Default meta tags for crawlers that don't execute JavaScript -->
+    <title>My App</title>
+    <meta name="description" content="Default description for your app." />
+    <meta property="og:title" content="My App" />
+    <meta property="og:description" content="Default description for your app." />
+    <meta property="og:image" content="https://example.com/default-image.jpg" />
+    <meta property="og:url" content="https://example.com" />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://example.com" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+```
+
+`react-head-safe` will **override these defaults at runtime** when JavaScript executes, allowing page-specific meta tags for each route. This two-layer approach ensures:
+
+1. **Crawlers without JS execution** see meaningful default meta tags from `index.html`
+2. **Crawlers with JS execution** (e.g., Googlebot) and **users** see page-specific meta tags set by `react-head-safe`
+
 ## Why react-head-safe?
 
 A lightweight, CSR-focused alternative for managing document head elements in React. Perfect for simple client-side rendered applications that need:
