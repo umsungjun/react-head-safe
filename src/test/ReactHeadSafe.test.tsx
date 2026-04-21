@@ -451,4 +451,185 @@ describe('ReactHeadSafe', () => {
       }).not.toThrow();
     });
   });
+
+  describe('cleanup on unmount', () => {
+    it('should remove all inserted meta and link tags on unmount', () => {
+      const { unmount } = render(
+        <ReactHeadSafe
+          description="Test"
+          keywords="test,cleanup"
+          ogTitle="OG Title"
+          ogDescription="OG Description"
+          ogImage="https://example.com/img.jpg"
+          ogUrl="https://example.com"
+          ogType="website"
+          canonicalUrl="https://example.com"
+        />
+      );
+
+      // Sanity check: a representative tag exists before unmount
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).toBeInTheDocument();
+      expect(
+        document.querySelector('meta[property="og:title"]')
+      ).toBeInTheDocument();
+
+      unmount();
+
+      // After unmount: every inserted meta/link tag must be gone
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="keywords"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[property="og:title"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="twitter:title"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[property="og:description"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="twitter:description"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[property="og:image"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="twitter:image"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="twitter:card"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[property="og:url"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[property="og:type"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('link[rel="canonical"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should NOT reset document.title on unmount', () => {
+      const { unmount } = render(<ReactHeadSafe title="Page Title" />);
+      expect(document.title).toBe('Page Title');
+
+      unmount();
+
+      // title is intentionally NOT restored — next page's ReactHeadSafe overwrites it
+      expect(document.title).toBe('Page Title');
+    });
+  });
+
+  describe('prop transitioning to undefined', () => {
+    it('should remove description meta tag when prop becomes undefined', () => {
+      const { rerender } = render(<ReactHeadSafe description="Initial" />);
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).toBeInTheDocument();
+
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove og and twitter tags together when ogTitle becomes undefined', () => {
+      const { rerender } = render(<ReactHeadSafe ogTitle="Title" />);
+      expect(
+        document.querySelector('meta[property="og:title"]')
+      ).toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="twitter:title"]')
+      ).toBeInTheDocument();
+
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('meta[property="og:title"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="twitter:title"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove twitter:card when ogImage becomes undefined', () => {
+      const { rerender } = render(
+        <ReactHeadSafe ogImage="https://example.com/img.jpg" />
+      );
+      expect(
+        document.querySelector('meta[name="twitter:card"]')
+      ).toBeInTheDocument();
+
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('meta[property="og:image"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="twitter:image"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="twitter:card"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove canonical link when canonicalUrl becomes undefined', () => {
+      const { rerender } = render(
+        <ReactHeadSafe canonicalUrl="https://example.com" />
+      );
+      expect(
+        document.querySelector('link[rel="canonical"]')
+      ).toBeInTheDocument();
+
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('link[rel="canonical"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove only the unset prop and keep others', () => {
+      const { rerender } = render(
+        <ReactHeadSafe description="Desc" ogTitle="Title" />
+      );
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).toBeInTheDocument();
+      expect(
+        document.querySelector('meta[property="og:title"]')
+      ).toBeInTheDocument();
+
+      // Drop description; ogTitle should remain
+      rerender(<ReactHeadSafe ogTitle="Title" />);
+
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[property="og:title"]')
+      ).toBeInTheDocument();
+    });
+  });
+
+  describe('multiple rerenders', () => {
+    it('should not accumulate duplicate tags across many rerenders', () => {
+      const { rerender } = render(<ReactHeadSafe description="v1" />);
+
+      for (let i = 2; i <= 10; i++) {
+        rerender(<ReactHeadSafe description={`v${i}`} />);
+      }
+
+      const tags = document.querySelectorAll('meta[name="description"]');
+      expect(tags).toHaveLength(1);
+      expect(tags[0].getAttribute('content')).toBe('v10');
+    });
+  });
 });
