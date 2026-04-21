@@ -137,6 +137,37 @@ Open Graph 태그를 설정하면 해당하는 Twitter Card 태그가 자동으�
 | `ogDescription` | `twitter:description` |
 | `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
 
+## 동작 방식
+
+### 언마운트 시 자동 정리
+
+`<ReactHeadSafe>` 인스턴스가 언마운트될 때 (예: SPA 페이지 전환 시), 해당 인스턴스가 삽입한 모든 meta/link 태그가 `<head>`에서 자동으로 제거됩니다. 페이지 간 stale 메타데이터 유출을 방지합니다.
+
+```tsx
+// v1.7.0 이전: /home에서 설정한 og:image가 /about에도 남아있었음
+// v1.7.0 이후: HomePage 언마운트 시 cleanup이 og:image를 자동 제거
+<Route path="/home" element={<HomePage />} />    {/* ogImage 사용 */}
+<Route path="/about" element={<AboutPage />} />  {/* ogImage 없음 */}
+```
+
+> **참고:** `document.title`은 언마운트 시 **복원되지 않습니다**. 다음 페이지의 `<ReactHeadSafe>`가 즉시 덮어쓰는 것이 일반적이기 때문에, 복원 시 순간적인 깜빡임이 발생할 수 있습니다. 후속 인스턴스가 `title`을 설정하지 않으면 이전 값이 남습니다.
+
+### `undefined` 전달로 태그 제거하기
+
+prop이 값에서 `undefined`로 변경되면 해당 태그가 제거됩니다. 컴포넌트를 언마운트하지 않고도 조건부로 태그를 빼고 싶을 때 사용하세요:
+
+```tsx
+<ReactHeadSafe
+  title="My Page"
+  ogImage={isSharable ? shareImage : undefined}
+/>
+```
+
+### 추적하지 않는 항목
+
+- **React 마운트 전에 `index.html`에 있던 태그** — `<ReactHeadSafe>`는 마운트 시 이들을 덮어쓰지만, 언마운트 시 **복원하지는 않습니다**. `index.html`은 "기본값" 계층으로, `<ReactHeadSafe>`는 "덮어쓰기" 계층으로 이해해주세요.
+- **동시에 여러 개의 `<ReactHeadSafe>` 인스턴스** — 두 인스턴스가 겹치는 prop을 동시에 설정하는 경우 동작을 보장하지 않습니다. 페이지당 하나의 인스턴스만 사용하세요.
+
 ## 로컬 개발
 
 예제 애플리케이션으로 로컬 변경사항을 테스트하려면:

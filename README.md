@@ -137,6 +137,37 @@ When you set Open Graph tags, the corresponding Twitter Card tags are automatica
 | `ogDescription` | `twitter:description` |
 | `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
 
+## Behavior
+
+### Automatic cleanup on unmount
+
+When a `<ReactHeadSafe>` instance unmounts (e.g., during SPA page transitions), all meta and link tags it inserted are automatically removed from `<head>`. This prevents stale metadata from leaking between pages.
+
+```tsx
+// Before v1.7.0: og:image set on /home would persist on /about
+// v1.7.0+:       cleanup removes og:image automatically when HomePage unmounts
+<Route path="/home" element={<HomePage />} />    {/* uses ogImage */}
+<Route path="/about" element={<AboutPage />} />  {/* no ogImage  */}
+```
+
+> **Note:** `document.title` is **not** restored on unmount. Since the next page's `<ReactHeadSafe>` typically overrides it immediately, restoring would cause a visible flash. If no subsequent instance sets `title`, the previous value remains.
+
+### Removing a tag by passing `undefined`
+
+If a prop transitions from a value to `undefined` on re-render, the corresponding tag is removed. This lets you conditionally drop a tag without unmounting the component:
+
+```tsx
+<ReactHeadSafe
+  title="My Page"
+  ogImage={isSharable ? shareImage : undefined}
+/>
+```
+
+### What is NOT tracked
+
+- **Tags present in `index.html` before React mounts** — `<ReactHeadSafe>` overwrites them on mount but does **not** restore them on unmount. Treat `index.html` as the "default" layer and `<ReactHeadSafe>` as the "override" layer.
+- **Multiple simultaneous instances** — behavior is not guaranteed when two `<ReactHeadSafe>` instances target overlapping props at the same time. Use a single instance per page.
+
 ## Local Development
 
 To test your local changes with the example application:
