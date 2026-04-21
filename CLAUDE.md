@@ -29,6 +29,8 @@ pnpm vitest run -t "test name pattern"
 
 The component returns `null` (no DOM output). The `updateMetaTag()` helper removes any existing matching `<meta>` element before inserting the new one, preventing duplicates.
 
+The `useLayoutEffect` tracks the selectors it inserts in a local `insertedSelectors` array and returns a cleanup function that removes them. This runs when deps change (handling prop → `undefined` transitions) and on unmount (preventing stale metadata across SPA page transitions). `document.title` is intentionally not restored on cleanup.
+
 Twitter Card tags are automatically derived from OG props — there are no separate Twitter-specific props. The exact mapping is:
 
 | OG prop | Also writes |
@@ -43,8 +45,13 @@ Twitter Card tags are automatically derived from OG props — there are no separ
 When adding a new meta tag prop, update all four of these locations:
 
 1. `src/types.ts` — add the prop to `ReactHeadSafeProps`
-2. `src/ReactHeadSafe.tsx` — destructure the prop, add `updateMetaTag()` call(s) inside `useLayoutEffect`, and add it to the dependency array
-3. `src/test/ReactHeadSafe.test.tsx` — add tests (creation, update on re-render, duplicate prevention)
+2. `src/ReactHeadSafe.tsx` — destructure the prop, add `updateMetaTag()` call(s) inside `useLayoutEffect`, **push the corresponding selector(s) to `insertedSelectors` so cleanup removes them**, and add the prop to the dependency array
+3. `src/test/ReactHeadSafe.test.tsx` — add tests (creation, update on re-render, duplicate prevention, **removal on unmount**, **removal when prop transitions to `undefined`**)
+4. `README.md` and `README.ko.md` — add the prop to the API Reference table
+
+### Code style
+
+Write all code comments in English — this overrides the global "Korean comments" rule. The library is published to npm for an international audience, so in-source comments must be English. User-facing documentation in README may still include a Korean translation (`README.ko.md`).
 
 ### Build output
 
