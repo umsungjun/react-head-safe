@@ -31,7 +31,14 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
   canonicalUrl,
 }) => {
   useLayoutEffect(() => {
+    // Track selectors for meta/link tags inserted in this effect run.
+    // Cleanup only removes tags we inserted, preventing stale tags on
+    // unmount or when a prop transitions to undefined.
+    const insertedSelectors: string[] = [];
+
     // Update title
+    // NOTE: document.title is intentionally not restored on cleanup —
+    // the next page's ReactHeadSafe typically overwrites it immediately.
     if (title !== undefined) {
       document.title = title;
     }
@@ -39,42 +46,70 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
     // Update description meta tag
     if (description !== undefined) {
       updateMetaTag('name', 'description', description);
+      insertedSelectors.push('meta[name="description"]');
     }
 
     // Update keywords meta tag
     if (keywords !== undefined) {
       updateMetaTag('name', 'keywords', keywords);
+      insertedSelectors.push('meta[name="keywords"]');
     }
 
     // Update Open Graph tags and Twitter tags
     if (ogTitle !== undefined) {
       updateMetaTag('property', 'og:title', ogTitle);
       updateMetaTag('name', 'twitter:title', ogTitle);
+      insertedSelectors.push(
+        'meta[property="og:title"]',
+        'meta[name="twitter:title"]'
+      );
     }
 
     if (ogDescription !== undefined) {
       updateMetaTag('property', 'og:description', ogDescription);
       updateMetaTag('name', 'twitter:description', ogDescription);
+      insertedSelectors.push(
+        'meta[property="og:description"]',
+        'meta[name="twitter:description"]'
+      );
     }
 
     if (ogImage !== undefined) {
       updateMetaTag('property', 'og:image', ogImage);
       updateMetaTag('name', 'twitter:image', ogImage);
       updateMetaTag('name', 'twitter:card', 'summary_large_image');
+      insertedSelectors.push(
+        'meta[property="og:image"]',
+        'meta[name="twitter:image"]',
+        'meta[name="twitter:card"]'
+      );
     }
 
     if (ogUrl !== undefined) {
       updateMetaTag('property', 'og:url', ogUrl);
+      insertedSelectors.push('meta[property="og:url"]');
     }
 
     if (ogType !== undefined) {
       updateMetaTag('property', 'og:type', ogType);
+      insertedSelectors.push('meta[property="og:type"]');
     }
 
     // Update canonical URL
     if (canonicalUrl !== undefined) {
       updateLinkTag('canonical', canonicalUrl);
+      insertedSelectors.push('link[rel="canonical"]');
     }
+
+    // Cleanup: remove every tag this effect inserted.
+    // - On deps change: runs before the next effect, clearing stale tags
+    //   (handles prop → undefined transitions).
+    // - On unmount: final run, preventing stale metadata across pages.
+    return () => {
+      insertedSelectors.forEach((selector) => {
+        document.querySelector(selector)?.remove();
+      });
+    };
   }, [
     title,
     description,
