@@ -12,7 +12,11 @@ export default function Home() {
         ogImage={`${window.location.origin}/logo.png`}
         ogUrl={window.location.href}
         ogType="website"
+        ogSiteName="React Head Safe Demo"
+        ogLocale="en_US"
         canonicalUrl={window.location.href}
+        twitterSite="@reactheadsafe"
+        twitterCreator="@umsungjun"
       />
 
       <div className="page-container">

@@ -17,4 +17,12 @@ export interface ReactHeadSafeProps {
   ogType?: string;
   /** The canonical URL of the page for SEO (link rel="canonical") */
   canonicalUrl?: string;
+  /** The site name for social media sharing (og:site_name) */
+  ogSiteName?: string;
+  /** The locale of the content (og:locale), e.g. "en_US", "ko_KR" */
+  ogLocale?: string;
+  /** The Twitter @username of the website (twitter:site), e.g. "@mysite" */
+  twitterSite?: string;
+  /** The Twitter @username of the content author (twitter:creator), e.g. "@author" */
+  twitterCreator?: string;
 }
