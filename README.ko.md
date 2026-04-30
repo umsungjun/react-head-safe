@@ -115,27 +115,33 @@ function MyPage() {
 
 ### ReactHeadSafeProps
 
-| Prop            | Type     | Description                                                                 |
-| --------------- | -------- | --------------------------------------------------------------------------- |
-| `title`         | `string` | `document.title`에 설정될 페이지 제목                                       |
-| `description`   | `string` | SEO를 위한 메타 설명 태그 콘텐츠                                            |
-| `keywords`      | `string` | SEO를 위한 메타 키워드 태그 콘텐츠                                          |
-| `ogTitle`       | `string` | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)                          |
-| `ogDescription` | `string` | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description)                    |
-| `ogImage`       | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                    |
-| `ogUrl`         | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                             |
-| `ogType`        | `string` | 소셜 미디어 공유를 위한 Open Graph 타입, 예: "website", "article" (og:type) |
-| `canonicalUrl`  | `string` | SEO를 위한 페이지의 대표 URL (`<link rel="canonical">`)                     |
+| Prop             | Type     | Description                                                                 |
+| ---------------- | -------- | --------------------------------------------------------------------------- |
+| `title`          | `string` | `document.title`에 설정될 페이지 제목                                       |
+| `description`    | `string` | SEO를 위한 메타 설명 태그 콘텐츠                                            |
+| `keywords`       | `string` | SEO를 위한 메타 키워드 태그 콘텐츠                                          |
+| `ogTitle`        | `string` | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)                          |
+| `ogDescription`  | `string` | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description)                    |
+| `ogImage`        | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                    |
+| `ogUrl`          | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                             |
+| `ogType`         | `string` | 소셜 미디어 공유를 위한 Open Graph 타입, 예: "website", "article" (og:type) |
+| `canonicalUrl`   | `string` | SEO를 위한 페이지의 대표 URL (`<link rel="canonical">`)                     |
+| `ogSiteName`     | `string` | 소셜 미디어 공유를 위한 사이트 이름 (og:site_name)                          |
+| `ogLocale`       | `string` | 콘텐츠의 언어/지역 코드 (og:locale), 예: `"ko_KR"`, `"en_US"`               |
+| `twitterSite`    | `string` | 웹사이트의 Twitter 계정 (twitter:site), 예: `"@mysite"`                     |
+| `twitterCreator` | `string` | 콘텐츠 작성자의 Twitter 계정 (twitter:creator), 예: `"@author"`             |
 
 ### Twitter Card 지원
 
 Open Graph 태그를 설정하면 해당하는 Twitter Card 태그가 자동으로 생성됩니다:
 
-| Open Graph Prop | 생성되는 Twitter 태그 |
-| --------------- | --------------------- |
-| `ogTitle`       | `twitter:title`       |
-| `ogDescription` | `twitter:description` |
+| Open Graph Prop | 생성되는 Twitter 태그                                  |
+| --------------- | ------------------------------------------------------ |
+| `ogTitle`       | `twitter:title`                                        |
+| `ogDescription` | `twitter:description`                                  |
 | `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
+
+또한 `twitterSite`와 `twitterCreator`는 Open Graph 대응 항목 없이 `twitter:site`와 `twitter:creator`에 직접 씁니다.
 
 ## 동작 방식
 
@@ -157,10 +163,7 @@ Open Graph 태그를 설정하면 해당하는 Twitter Card 태그가 자동으�
 prop이 값에서 `undefined`로 변경되면 해당 태그가 제거됩니다. 컴포넌트를 언마운트하지 않고도 조건부로 태그를 빼고 싶을 때 사용하세요:
 
 ```tsx
-<ReactHeadSafe
-  title="My Page"
-  ogImage={isSharable ? shareImage : undefined}
-/>
+<ReactHeadSafe title="My Page" ogImage={isSharable ? shareImage : undefined} />
 ```
 
 ### 추적하지 않는 항목

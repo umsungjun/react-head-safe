@@ -31,14 +31,16 @@ The component returns `null` (no DOM output). The `updateMetaTag()` helper remov
 
 The `useLayoutEffect` tracks the selectors it inserts in a local `insertedSelectors` array and returns a cleanup function that removes them. This runs when deps change (handling prop → `undefined` transitions) and on unmount (preventing stale metadata across SPA page transitions). `document.title` is intentionally not restored on cleanup.
 
-Twitter Card tags are automatically derived from OG props — there are no separate Twitter-specific props. The exact mapping is:
+Most Twitter Card tags are automatically derived from OG props:
 
-| OG prop | Also writes |
-|---|---|
-| `ogTitle` | `twitter:title` |
-| `ogDescription` | `twitter:description` |
-| `ogImage` | `twitter:image` + `twitter:card` (hardcoded to `summary_large_image`) |
-| `ogUrl`, `ogType` | *(no Twitter equivalent)* |
+| OG prop           | Also writes                                                           |
+| ----------------- | --------------------------------------------------------------------- |
+| `ogTitle`         | `twitter:title`                                                       |
+| `ogDescription`   | `twitter:description`                                                 |
+| `ogImage`         | `twitter:image` + `twitter:card` (hardcoded to `summary_large_image`) |
+| `ogUrl`, `ogType` | _(no Twitter equivalent)_                                             |
+
+`twitterSite` and `twitterCreator` are standalone Twitter-only props with no Open Graph equivalent — they write directly to `twitter:site` and `twitter:creator`.
 
 ### Adding a new prop
 
@@ -56,6 +58,7 @@ Write all code comments in English — this overrides the global "Korean comment
 ### Build output
 
 Vite is configured in library mode and produces:
+
 - `dist/index.js` — CommonJS
 - `dist/index.mjs` — ESM
 - `dist/index.d.ts` — TypeScript declarations

@@ -24,7 +24,10 @@ For optimal SEO, always set default meta tags directly in your `index.html`:
     <title>My App</title>
     <meta name="description" content="Default description for your app." />
     <meta property="og:title" content="My App" />
-    <meta property="og:description" content="Default description for your app." />
+    <meta
+      property="og:description"
+      content="Default description for your app."
+    />
     <meta property="og:image" content="https://example.com/default-image.jpg" />
     <meta property="og:url" content="https://example.com" />
     <meta property="og:type" content="website" />
@@ -115,27 +118,33 @@ That's it! The component will automatically:
 
 ### ReactHeadSafeProps
 
-| Prop            | Type     | Description                                                                                  |
-| --------------- | -------- | -------------------------------------------------------------------------------------------- |
-| `title`         | `string` | The page title that will be set in the `document.title`                                      |
-| `description`   | `string` | The meta description tag content for SEO                                                     |
-| `keywords`      | `string` | The meta keywords tag content for SEO                                                        |
-| `ogTitle`       | `string` | The Open Graph title (og:title) for social media sharing                                     |
-| `ogDescription` | `string` | The Open Graph description (og:description) for social media sharing                         |
-| `ogImage`       | `string` | The Open Graph image URL (og:image) for social media sharing                                 |
-| `ogUrl`         | `string` | The canonical URL of your object that will be used as its permanent ID in the graph (og:url) |
-| `ogType`        | `string` | The type of your object, e.g., "website", "article" (og:type)                                |
-| `canonicalUrl`  | `string` | The canonical URL of the page for SEO (`<link rel="canonical">`)                             |
+| Prop             | Type     | Description                                                                                  |
+| ---------------- | -------- | -------------------------------------------------------------------------------------------- |
+| `title`          | `string` | The page title that will be set in the `document.title`                                      |
+| `description`    | `string` | The meta description tag content for SEO                                                     |
+| `keywords`       | `string` | The meta keywords tag content for SEO                                                        |
+| `ogTitle`        | `string` | The Open Graph title (og:title) for social media sharing                                     |
+| `ogDescription`  | `string` | The Open Graph description (og:description) for social media sharing                         |
+| `ogImage`        | `string` | The Open Graph image URL (og:image) for social media sharing                                 |
+| `ogUrl`          | `string` | The canonical URL of your object that will be used as its permanent ID in the graph (og:url) |
+| `ogType`         | `string` | The type of your object, e.g., "website", "article" (og:type)                                |
+| `canonicalUrl`   | `string` | The canonical URL of the page for SEO (`<link rel="canonical">`)                             |
+| `ogSiteName`     | `string` | The site name for social media sharing (og:site_name)                                        |
+| `ogLocale`       | `string` | The locale of the content (og:locale), e.g. `"en_US"`, `"ko_KR"`                             |
+| `twitterSite`    | `string` | The Twitter @username of the website (twitter:site), e.g. `"@mysite"`                        |
+| `twitterCreator` | `string` | The Twitter @username of the content author (twitter:creator), e.g. `"@author"`              |
 
 ### Twitter Card Support
 
 When you set Open Graph tags, the corresponding Twitter Card tags are automatically generated:
 
-| Open Graph Prop | Twitter Tag Generated |
-| --------------- | --------------------- |
-| `ogTitle`       | `twitter:title`       |
-| `ogDescription` | `twitter:description` |
+| Open Graph Prop | Twitter Tag Generated                                  |
+| --------------- | ------------------------------------------------------ |
+| `ogTitle`       | `twitter:title`                                        |
+| `ogDescription` | `twitter:description`                                  |
 | `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
+
+In addition, `twitterSite` and `twitterCreator` write directly to `twitter:site` and `twitter:creator` with no Open Graph equivalent.
 
 ## Behavior
 
@@ -157,10 +166,7 @@ When a `<ReactHeadSafe>` instance unmounts (e.g., during SPA page transitions), 
 If a prop transitions from a value to `undefined` on re-render, the corresponding tag is removed. This lets you conditionally drop a tag without unmounting the component:
 
 ```tsx
-<ReactHeadSafe
-  title="My Page"
-  ogImage={isSharable ? shareImage : undefined}
-/>
+<ReactHeadSafe title="My Page" ogImage={isSharable ? shareImage : undefined} />
 ```
 
 ### What is NOT tracked
