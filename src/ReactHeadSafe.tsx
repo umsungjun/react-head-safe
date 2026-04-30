@@ -29,6 +29,10 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
   ogUrl,
   ogType,
   canonicalUrl,
+  ogSiteName,
+  ogLocale,
+  twitterSite,
+  twitterCreator,
 }) => {
   useLayoutEffect(() => {
     // Track selectors for meta/link tags inserted in this effect run.
@@ -101,6 +105,26 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
       insertedSelectors.push('link[rel="canonical"]');
     }
 
+    if (ogSiteName !== undefined) {
+      updateMetaTag('property', 'og:site_name', ogSiteName);
+      insertedSelectors.push('meta[property="og:site_name"]');
+    }
+
+    if (ogLocale !== undefined) {
+      updateMetaTag('property', 'og:locale', ogLocale);
+      insertedSelectors.push('meta[property="og:locale"]');
+    }
+
+    if (twitterSite !== undefined) {
+      updateMetaTag('name', 'twitter:site', twitterSite);
+      insertedSelectors.push('meta[name="twitter:site"]');
+    }
+
+    if (twitterCreator !== undefined) {
+      updateMetaTag('name', 'twitter:creator', twitterCreator);
+      insertedSelectors.push('meta[name="twitter:creator"]');
+    }
+
     // Cleanup: remove every tag this effect inserted.
     // - On deps change: runs before the next effect, clearing stale tags
     //   (handles prop → undefined transitions).
@@ -120,6 +144,10 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
     ogUrl,
     ogType,
     canonicalUrl,
+    ogSiteName,
+    ogLocale,
+    twitterSite,
+    twitterCreator,
   ]);
 
   return null;

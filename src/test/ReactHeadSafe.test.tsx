@@ -408,9 +408,7 @@ describe('ReactHeadSafe', () => {
           ?.getAttribute('content')
       ).toBe('website');
       expect(
-        document
-          .querySelector('link[rel="canonical"]')
-          ?.getAttribute('href')
+        document.querySelector('link[rel="canonical"]')?.getAttribute('href')
       ).toBe('https://example.com/page');
     });
 
@@ -449,6 +447,190 @@ describe('ReactHeadSafe', () => {
       expect(() => {
         render(<ReactHeadSafe title="Test" />);
       }).not.toThrow();
+    });
+  });
+
+  describe('og:site_name meta tag', () => {
+    it('should create og:site_name meta tag', () => {
+      render(<ReactHeadSafe ogSiteName="My Site" />);
+
+      const metaTag = document.querySelector('meta[property="og:site_name"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('My Site');
+    });
+
+    it('should update og:site_name meta tag when prop changes', () => {
+      const { rerender } = render(<ReactHeadSafe ogSiteName="Initial Site" />);
+      rerender(<ReactHeadSafe ogSiteName="Updated Site" />);
+
+      const metaTag = document.querySelector('meta[property="og:site_name"]');
+      expect(metaTag?.getAttribute('content')).toBe('Updated Site');
+    });
+
+    it('should prevent duplicate og:site_name meta tags', () => {
+      const { rerender } = render(<ReactHeadSafe ogSiteName="First" />);
+      rerender(<ReactHeadSafe ogSiteName="Second" />);
+
+      const metaTags = document.querySelectorAll(
+        'meta[property="og:site_name"]'
+      );
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe('Second');
+    });
+
+    it('should remove og:site_name meta tag on unmount', () => {
+      const { unmount } = render(<ReactHeadSafe ogSiteName="My Site" />);
+      unmount();
+
+      expect(
+        document.querySelector('meta[property="og:site_name"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove og:site_name meta tag when prop becomes undefined', () => {
+      const { rerender } = render(<ReactHeadSafe ogSiteName="My Site" />);
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('meta[property="og:site_name"]')
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('og:locale meta tag', () => {
+    it('should create og:locale meta tag', () => {
+      render(<ReactHeadSafe ogLocale="ko_KR" />);
+
+      const metaTag = document.querySelector('meta[property="og:locale"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('ko_KR');
+    });
+
+    it('should update og:locale meta tag when prop changes', () => {
+      const { rerender } = render(<ReactHeadSafe ogLocale="ko_KR" />);
+      rerender(<ReactHeadSafe ogLocale="en_US" />);
+
+      const metaTag = document.querySelector('meta[property="og:locale"]');
+      expect(metaTag?.getAttribute('content')).toBe('en_US');
+    });
+
+    it('should prevent duplicate og:locale meta tags', () => {
+      const { rerender } = render(<ReactHeadSafe ogLocale="ko_KR" />);
+      rerender(<ReactHeadSafe ogLocale="en_US" />);
+
+      const metaTags = document.querySelectorAll('meta[property="og:locale"]');
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe('en_US');
+    });
+
+    it('should remove og:locale meta tag on unmount', () => {
+      const { unmount } = render(<ReactHeadSafe ogLocale="ko_KR" />);
+      unmount();
+
+      expect(
+        document.querySelector('meta[property="og:locale"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove og:locale meta tag when prop becomes undefined', () => {
+      const { rerender } = render(<ReactHeadSafe ogLocale="ko_KR" />);
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('meta[property="og:locale"]')
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('twitter:site meta tag', () => {
+    it('should create twitter:site meta tag', () => {
+      render(<ReactHeadSafe twitterSite="@mysite" />);
+
+      const metaTag = document.querySelector('meta[name="twitter:site"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('@mysite');
+    });
+
+    it('should update twitter:site meta tag when prop changes', () => {
+      const { rerender } = render(<ReactHeadSafe twitterSite="@oldsite" />);
+      rerender(<ReactHeadSafe twitterSite="@newsite" />);
+
+      const metaTag = document.querySelector('meta[name="twitter:site"]');
+      expect(metaTag?.getAttribute('content')).toBe('@newsite');
+    });
+
+    it('should prevent duplicate twitter:site meta tags', () => {
+      const { rerender } = render(<ReactHeadSafe twitterSite="@first" />);
+      rerender(<ReactHeadSafe twitterSite="@second" />);
+
+      const metaTags = document.querySelectorAll('meta[name="twitter:site"]');
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe('@second');
+    });
+
+    it('should remove twitter:site meta tag on unmount', () => {
+      const { unmount } = render(<ReactHeadSafe twitterSite="@mysite" />);
+      unmount();
+
+      expect(
+        document.querySelector('meta[name="twitter:site"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove twitter:site meta tag when prop becomes undefined', () => {
+      const { rerender } = render(<ReactHeadSafe twitterSite="@mysite" />);
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('meta[name="twitter:site"]')
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('twitter:creator meta tag', () => {
+    it('should create twitter:creator meta tag', () => {
+      render(<ReactHeadSafe twitterCreator="@author" />);
+
+      const metaTag = document.querySelector('meta[name="twitter:creator"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('@author');
+    });
+
+    it('should update twitter:creator meta tag when prop changes', () => {
+      const { rerender } = render(<ReactHeadSafe twitterCreator="@old" />);
+      rerender(<ReactHeadSafe twitterCreator="@new" />);
+
+      const metaTag = document.querySelector('meta[name="twitter:creator"]');
+      expect(metaTag?.getAttribute('content')).toBe('@new');
+    });
+
+    it('should prevent duplicate twitter:creator meta tags', () => {
+      const { rerender } = render(<ReactHeadSafe twitterCreator="@first" />);
+      rerender(<ReactHeadSafe twitterCreator="@second" />);
+
+      const metaTags = document.querySelectorAll(
+        'meta[name="twitter:creator"]'
+      );
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe('@second');
+    });
+
+    it('should remove twitter:creator meta tag on unmount', () => {
+      const { unmount } = render(<ReactHeadSafe twitterCreator="@author" />);
+      unmount();
+
+      expect(
+        document.querySelector('meta[name="twitter:creator"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove twitter:creator meta tag when prop becomes undefined', () => {
+      const { rerender } = render(<ReactHeadSafe twitterCreator="@author" />);
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('meta[name="twitter:creator"]')
+      ).not.toBeInTheDocument();
     });
   });
 
