@@ -1,2 +1,2 @@
 export { ReactHeadSafe } from './ReactHeadSafe';
-export type { ReactHeadSafeProps } from './types';
+export type { ReactHeadSafeProps, OgType } from './types';

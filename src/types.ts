@@ -1,3 +1,26 @@
+/**
+ * Standard Open Graph object types per the OG Protocol.
+ *
+ * Provides IDE autocompletion for the 12 well-known values while still
+ * accepting any string for forward compatibility (via `(string & {})`).
+ *
+ * @see https://ogp.me/#types
+ */
+export type OgType =
+  | 'website'
+  | 'article'
+  | 'book'
+  | 'profile'
+  | 'video.movie'
+  | 'video.episode'
+  | 'video.tv_show'
+  | 'video.other'
+  | 'music.song'
+  | 'music.album'
+  | 'music.playlist'
+  | 'music.radio_station'
+  | (string & {});
+
 export interface ReactHeadSafeProps {
   /** The page title that will be set in the document.title */
   title?: string;
@@ -14,7 +37,7 @@ export interface ReactHeadSafeProps {
   /** The canonical URL of your object that will be used as its permanent ID in the graph (og:url) */
   ogUrl?: string;
   /** The type of your object, e.g., "website", "article" (og:type) */
-  ogType?: string;
+  ogType?: OgType;
   /** The canonical URL of the page for SEO (link rel="canonical") */
   canonicalUrl?: string;
   /** The site name for social media sharing (og:site_name) */
