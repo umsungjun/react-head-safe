@@ -118,21 +118,21 @@ That's it! The component will automatically:
 
 ### ReactHeadSafeProps
 
-| Prop             | Type     | Description                                                                                  |
-| ---------------- | -------- | -------------------------------------------------------------------------------------------- |
-| `title`          | `string` | The page title that will be set in the `document.title`                                      |
-| `description`    | `string` | The meta description tag content for SEO                                                     |
-| `keywords`       | `string` | The meta keywords tag content for SEO                                                        |
-| `ogTitle`        | `string` | The Open Graph title (og:title) for social media sharing                                     |
-| `ogDescription`  | `string` | The Open Graph description (og:description) for social media sharing                         |
-| `ogImage`        | `string` | The Open Graph image URL (og:image) for social media sharing                                 |
-| `ogUrl`          | `string` | The canonical URL of your object that will be used as its permanent ID in the graph (og:url) |
-| `ogType`         | `string` | The type of your object, e.g., "website", "article" (og:type)                                |
-| `canonicalUrl`   | `string` | The canonical URL of the page for SEO (`<link rel="canonical">`)                             |
-| `ogSiteName`     | `string` | The site name for social media sharing (og:site_name)                                        |
-| `ogLocale`       | `string` | The locale of the content (og:locale), e.g. `"en_US"`, `"ko_KR"`                             |
-| `twitterSite`    | `string` | The Twitter @username of the website (twitter:site), e.g. `"@mysite"`                        |
-| `twitterCreator` | `string` | The Twitter @username of the content author (twitter:creator), e.g. `"@author"`              |
+| Prop             | Type     | Description                                                                                      |
+| ---------------- | -------- | ------------------------------------------------------------------------------------------------ |
+| `title`          | `string` | The page title that will be set in the `document.title`                                          |
+| `description`    | `string` | The meta description tag content for SEO                                                         |
+| `keywords`       | `string` | The meta keywords tag content for SEO                                                            |
+| `ogTitle`        | `string` | The Open Graph title (og:title) for social media sharing                                         |
+| `ogDescription`  | `string` | The Open Graph description (og:description) for social media sharing                             |
+| `ogImage`        | `string` | The Open Graph image URL (og:image) for social media sharing                                     |
+| `ogUrl`          | `string` | The canonical URL of your object that will be used as its permanent ID in the graph (og:url)     |
+| `ogType`         | `OgType` | The type of your object (og:type). Autocompletes 12 standard OG values; also accepts any string. |
+| `canonicalUrl`   | `string` | The canonical URL of the page for SEO (`<link rel="canonical">`)                                 |
+| `ogSiteName`     | `string` | The site name for social media sharing (og:site_name)                                            |
+| `ogLocale`       | `string` | The locale of the content (og:locale), e.g. `"en_US"`, `"ko_KR"`                                 |
+| `twitterSite`    | `string` | The Twitter @username of the website (twitter:site), e.g. `"@mysite"`                            |
+| `twitterCreator` | `string` | The Twitter @username of the content author (twitter:creator), e.g. `"@author"`                  |
 
 ### Twitter Card Support
 
@@ -145,6 +145,20 @@ When you set Open Graph tags, the corresponding Twitter Card tags are automatica
 | `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
 
 In addition, `twitterSite` and `twitterCreator` write directly to `twitter:site` and `twitter:creator` with no Open Graph equivalent.
+
+### `OgType` standard values
+
+`ogType` provides autocomplete for these 12 OG Protocol standard values while still accepting any custom string:
+
+`'website'` · `'article'` · `'book'` · `'profile'` · `'video.movie'` · `'video.episode'` · `'video.tv_show'` · `'video.other'` · `'music.song'` · `'music.album'` · `'music.playlist'` · `'music.radio_station'`
+
+You can also import the `OgType` type for use in your own code:
+
+```tsx
+import { ReactHeadSafe, type OgType } from 'react-head-safe';
+
+const pageType: OgType = 'article';
+```
 
 ## Behavior
 

@@ -115,21 +115,21 @@ function MyPage() {
 
 ### ReactHeadSafeProps
 
-| Prop             | Type     | Description                                                                 |
-| ---------------- | -------- | --------------------------------------------------------------------------- |
-| `title`          | `string` | `document.title`에 설정될 페이지 제목                                       |
-| `description`    | `string` | SEO를 위한 메타 설명 태그 콘텐츠                                            |
-| `keywords`       | `string` | SEO를 위한 메타 키워드 태그 콘텐츠                                          |
-| `ogTitle`        | `string` | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)                          |
-| `ogDescription`  | `string` | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description)                    |
-| `ogImage`        | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                    |
-| `ogUrl`          | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                             |
-| `ogType`         | `string` | 소셜 미디어 공유를 위한 Open Graph 타입, 예: "website", "article" (og:type) |
-| `canonicalUrl`   | `string` | SEO를 위한 페이지의 대표 URL (`<link rel="canonical">`)                     |
-| `ogSiteName`     | `string` | 소셜 미디어 공유를 위한 사이트 이름 (og:site_name)                          |
-| `ogLocale`       | `string` | 콘텐츠의 언어/지역 코드 (og:locale), 예: `"ko_KR"`, `"en_US"`               |
-| `twitterSite`    | `string` | 웹사이트의 Twitter 계정 (twitter:site), 예: `"@mysite"`                     |
-| `twitterCreator` | `string` | 콘텐츠 작성자의 Twitter 계정 (twitter:creator), 예: `"@author"`             |
+| Prop             | Type     | Description                                                              |
+| ---------------- | -------- | ------------------------------------------------------------------------ |
+| `title`          | `string` | `document.title`에 설정될 페이지 제목                                    |
+| `description`    | `string` | SEO를 위한 메타 설명 태그 콘텐츠                                         |
+| `keywords`       | `string` | SEO를 위한 메타 키워드 태그 콘텐츠                                       |
+| `ogTitle`        | `string` | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)                       |
+| `ogDescription`  | `string` | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description)                 |
+| `ogImage`        | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                 |
+| `ogUrl`          | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                          |
+| `ogType`         | `OgType` | Open Graph 타입 (og:type). 표준 12개 값 자동완성 + 임의 string 모두 허용 |
+| `canonicalUrl`   | `string` | SEO를 위한 페이지의 대표 URL (`<link rel="canonical">`)                  |
+| `ogSiteName`     | `string` | 소셜 미디어 공유를 위한 사이트 이름 (og:site_name)                       |
+| `ogLocale`       | `string` | 콘텐츠의 언어/지역 코드 (og:locale), 예: `"ko_KR"`, `"en_US"`            |
+| `twitterSite`    | `string` | 웹사이트의 Twitter 계정 (twitter:site), 예: `"@mysite"`                  |
+| `twitterCreator` | `string` | 콘텐츠 작성자의 Twitter 계정 (twitter:creator), 예: `"@author"`          |
 
 ### Twitter Card 지원
 
@@ -142,6 +142,20 @@ Open Graph 태그를 설정하면 해당하는 Twitter Card 태그가 자동으�
 | `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
 
 또한 `twitterSite`와 `twitterCreator`는 Open Graph 대응 항목 없이 `twitter:site`와 `twitter:creator`에 직접 씁니다.
+
+### `OgType` 표준값
+
+`ogType`은 다음 12개 OG Protocol 표준값에 대해 자동완성을 제공하며, 그 외 임의 문자열도 허용합니다:
+
+`'website'` · `'article'` · `'book'` · `'profile'` · `'video.movie'` · `'video.episode'` · `'video.tv_show'` · `'video.other'` · `'music.song'` · `'music.album'` · `'music.playlist'` · `'music.radio_station'`
+
+`OgType` 타입을 직접 import해서 자기 코드에서도 활용할 수 있습니다:
+
+```tsx
+import { ReactHeadSafe, type OgType } from 'react-head-safe';
+
+const pageType: OgType = 'article';
+```
 
 ## 동작 방식
 
