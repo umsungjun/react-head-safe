@@ -115,21 +115,24 @@ function MyPage() {
 
 ### ReactHeadSafeProps
 
-| Prop             | Type     | Description                                                              |
-| ---------------- | -------- | ------------------------------------------------------------------------ |
-| `title`          | `string` | `document.title`에 설정될 페이지 제목                                    |
-| `description`    | `string` | SEO를 위한 메타 설명 태그 콘텐츠                                         |
-| `keywords`       | `string` | SEO를 위한 메타 키워드 태그 콘텐츠                                       |
-| `ogTitle`        | `string` | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)                       |
-| `ogDescription`  | `string` | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description)                 |
-| `ogImage`        | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                 |
-| `ogUrl`          | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                          |
-| `ogType`         | `OgType` | Open Graph 타입 (og:type). 표준 12개 값 자동완성 + 임의 string 모두 허용 |
-| `canonicalUrl`   | `string` | SEO를 위한 페이지의 대표 URL (`<link rel="canonical">`)                  |
-| `ogSiteName`     | `string` | 소셜 미디어 공유를 위한 사이트 이름 (og:site_name)                       |
-| `ogLocale`       | `string` | 콘텐츠의 언어/지역 코드 (og:locale), 예: `"ko_KR"`, `"en_US"`            |
-| `twitterSite`    | `string` | 웹사이트의 Twitter 계정 (twitter:site), 예: `"@mysite"`                  |
-| `twitterCreator` | `string` | 콘텐츠 작성자의 Twitter 계정 (twitter:creator), 예: `"@author"`          |
+| Prop             | Type     | Description                                                                                  |
+| ---------------- | -------- | -------------------------------------------------------------------------------------------- |
+| `title`          | `string` | `document.title`에 설정될 페이지 제목                                                        |
+| `description`    | `string` | SEO를 위한 메타 설명 태그 콘텐츠                                                             |
+| `keywords`       | `string` | SEO를 위한 메타 키워드 태그 콘텐츠                                                           |
+| `ogTitle`        | `string` | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)                                           |
+| `ogDescription`  | `string` | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description)                                     |
+| `ogImage`        | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                                     |
+| `ogUrl`          | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                                              |
+| `ogType`         | `OgType` | Open Graph 타입 (og:type). 표준 12개 값 자동완성 + 임의 string 모두 허용                     |
+| `canonicalUrl`   | `string` | SEO를 위한 페이지의 대표 URL (`<link rel="canonical">`)                                      |
+| `ogSiteName`     | `string` | 소셜 미디어 공유를 위한 사이트 이름 (og:site_name)                                           |
+| `ogLocale`       | `string` | 콘텐츠의 언어/지역 코드 (og:locale), 예: `"ko_KR"`, `"en_US"`                                |
+| `twitterSite`    | `string` | 웹사이트의 Twitter 계정 (twitter:site), 예: `"@mysite"`                                      |
+| `twitterCreator` | `string` | 콘텐츠 작성자의 Twitter 계정 (twitter:creator), 예: `"@author"`                              |
+| `robots`         | `string` | 크롤러 색인을 제어하는 robots 메타 태그 콘텐츠, 예: `"noindex,follow"`, `"noindex,nofollow"` |
+
+> **주의:** JS로 주입된 `robots="noindex"`는 JavaScript를 렌더링하는 크롤러(예: Googlebot, 단 지연 있음)만 인식합니다. JS를 실행하지 않는 크롤러(상당수의 봇, 소셜 미디어 프리뷰 봇 등)는 이 태그를 무시하므로 페이지가 여전히 색인될 수 있습니다. 반드시 확실하게 색인에서 제외해야 하는 페이지라면, 서버 측 `X-Robots-Tag: noindex` 헤더를 사용하세요.
 
 ### Twitter Card 지원
 
