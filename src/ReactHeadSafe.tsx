@@ -33,6 +33,7 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
   ogLocale,
   twitterSite,
   twitterCreator,
+  robots,
 }) => {
   useLayoutEffect(() => {
     // Track selectors for meta/link tags inserted in this effect run.
@@ -125,6 +126,12 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
       insertedSelectors.push('meta[name="twitter:creator"]');
     }
 
+    // Update robots meta tag (controls crawler indexing, e.g. "noindex,follow")
+    if (robots !== undefined) {
+      updateMetaTag('name', 'robots', robots);
+      insertedSelectors.push('meta[name="robots"]');
+    }
+
     // Cleanup: remove every tag this effect inserted.
     // - On deps change: runs before the next effect, clearing stale tags
     //   (handles prop → undefined transitions).
@@ -148,6 +155,7 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
     ogLocale,
     twitterSite,
     twitterCreator,
+    robots,
   ]);
 
   return null;

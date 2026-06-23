@@ -634,6 +634,51 @@ describe('ReactHeadSafe', () => {
     });
   });
 
+  describe('robots meta tag', () => {
+    it('should create robots meta tag', () => {
+      render(<ReactHeadSafe robots="noindex,follow" />);
+
+      const metaTag = document.querySelector('meta[name="robots"]');
+      expect(metaTag).toBeInTheDocument();
+      expect(metaTag?.getAttribute('content')).toBe('noindex,follow');
+    });
+
+    it('should update robots meta tag when prop changes', () => {
+      const { rerender } = render(<ReactHeadSafe robots="noindex,follow" />);
+      rerender(<ReactHeadSafe robots="noindex,nofollow" />);
+
+      const metaTag = document.querySelector('meta[name="robots"]');
+      expect(metaTag?.getAttribute('content')).toBe('noindex,nofollow');
+    });
+
+    it('should prevent duplicate robots meta tags', () => {
+      const { rerender } = render(<ReactHeadSafe robots="noindex,follow" />);
+      rerender(<ReactHeadSafe robots="noindex,nofollow" />);
+
+      const metaTags = document.querySelectorAll('meta[name="robots"]');
+      expect(metaTags).toHaveLength(1);
+      expect(metaTags[0].getAttribute('content')).toBe('noindex,nofollow');
+    });
+
+    it('should remove robots meta tag on unmount', () => {
+      const { unmount } = render(<ReactHeadSafe robots="noindex,follow" />);
+      unmount();
+
+      expect(
+        document.querySelector('meta[name="robots"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove robots meta tag when prop becomes undefined', () => {
+      const { rerender } = render(<ReactHeadSafe robots="noindex,follow" />);
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('meta[name="robots"]')
+      ).not.toBeInTheDocument();
+    });
+  });
+
   describe('cleanup on unmount', () => {
     it('should remove all inserted meta and link tags on unmount', () => {
       const { unmount } = render(

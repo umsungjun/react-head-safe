@@ -48,4 +48,12 @@ export interface ReactHeadSafeProps {
   twitterSite?: string;
   /** The Twitter @username of the content author (twitter:creator), e.g. "@author" */
   twitterCreator?: string;
+  /**
+   * The robots meta tag content controlling crawler indexing, e.g. "noindex,follow", "noindex,nofollow".
+   *
+   * Note: a JS-injected `noindex` is only honored by crawlers that render JavaScript
+   * (e.g. Googlebot, with delay). Non-JS crawlers ignore it. For pages that must be
+   * reliably excluded, use a server-side `X-Robots-Tag: noindex` header instead.
+   */
+  robots?: string;
 }
