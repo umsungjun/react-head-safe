@@ -51,6 +51,14 @@ React에서 document head 요소를 관리하기 위한 가볍고 CSR에 최적�
 - **성능** - 페인트 전 동기적 DOM 업데이트를 위해 `useLayoutEffect` 사용
 - **타입 안전성** - TypeScript로 작성되어 완전한 타입 정의 제공
 
+### React 19의 내장 메타데이터 지원과의 차이점
+
+React 19는 컴포넌트 안에서 렌더링한 `<title>`, `<meta>` 요소를 네이티브로 `<head>`에 호이스팅할 수 있습니다. `react-head-safe`는 React 19에서도 동작하며, 네이티브 동작 위에 다음과 같은 가치를 더합니다:
+
+- **`index.html` 기본값 덮어쓰기** - 네이티브 호이스팅은 `index.html`에 이미 있는 태그와 중복 제거를 하지 않아 크롤러가 기본 태그와 페이지별 태그를 둘 다 볼 수 있지만, `react-head-safe`는 기존 태그를 교체합니다
+- **Twitter Card 자동 생성** - OG props에서 Twitter 태그를 자동으로 파생합니다
+- **버전 간 일관성** - React 17, 18에서도 동일한 API로 동작하므로 마이그레이션 전에 미리 도입할 수 있습니다
+
 ## 주요 기능
 
 - ✅ **중복 태그 없음** - 새 태그를 만들기 전에 기존 메타 태그 제거
@@ -60,6 +68,7 @@ React에서 document head 요소를 관리하기 위한 가볍고 CSR에 최적�
 - ✅ **Open Graph 지원** - 소셜 미디어 메타 태그 기본 지원
 - ✅ **Twitter Card 지원** - Open Graph 태그 설정 시 Twitter 태그 자동 생성
 - ✅ **간단한 API** - props만 전달하면 되는 복잡하지 않은 설정
+- ✅ **React 17–19 호환** - React 17, 18, 19에서 모두 동작
 
 ## 설치
 
@@ -73,7 +82,7 @@ yarn add react-head-safe
 pnpm add react-head-safe
 ```
 
-의존성 제로 (React는 peer dependency입니다).
+의존성 제로 (React는 peer dependency입니다). React 17 이상이 필요하며, React 18과 **React 19**를 완전히 지원합니다.
 
 ## 빠른 시작
 

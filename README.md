@@ -54,6 +54,14 @@ A lightweight, CSR-focused alternative for managing document head elements in Re
 - **Performance** - Uses `useLayoutEffect` for synchronous DOM updates before paint
 - **Type safety** - Written in TypeScript with full type definitions
 
+### What about React 19's built-in metadata support?
+
+React 19 can natively hoist `<title>` and `<meta>` elements rendered inside components into `<head>`. `react-head-safe` works on React 19 too, and still adds value on top of the native behavior:
+
+- **Overrides `index.html` defaults** - Native hoisting does not deduplicate against tags already present in `index.html`, so crawlers may see both the default and the page-specific tag; `react-head-safe` replaces the existing one
+- **Automatic Twitter Cards** - Twitter tags are derived from OG props automatically
+- **Consistent across versions** - The same API works identically on React 17 and 18, so you can adopt it before migrating
+
 ## Features
 
 - ✅ **No Duplicate Tags** - Removes existing meta tags before creating new ones
@@ -63,6 +71,7 @@ A lightweight, CSR-focused alternative for managing document head elements in Re
 - ✅ **Open Graph Support** - Built-in support for social media meta tags
 - ✅ **Twitter Card Support** - Automatically sets Twitter tags when Open Graph tags are provided
 - ✅ **Simple API** - Just pass props, no complex configuration
+- ✅ **React 17–19 Compatible** - Works with React 17, 18, and 19
 
 ## Installation
 
@@ -76,7 +85,7 @@ yarn add react-head-safe
 pnpm add react-head-safe
 ```
 
-Zero dependencies required (React is a peer dependency).
+Zero dependencies required (React is a peer dependency). Requires React 17 or later — React 18 and **React 19** are fully supported.
 
 ## Quick Start
 
