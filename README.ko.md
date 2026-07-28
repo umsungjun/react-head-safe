@@ -124,22 +124,23 @@ function MyPage() {
 
 ### ReactHeadSafeProps
 
-| Prop             | Type     | Description                                                                                  |
-| ---------------- | -------- | -------------------------------------------------------------------------------------------- |
-| `title`          | `string` | `document.title`에 설정될 페이지 제목                                                        |
-| `description`    | `string` | SEO를 위한 메타 설명 태그 콘텐츠                                                             |
-| `keywords`       | `string` | SEO를 위한 메타 키워드 태그 콘텐츠                                                           |
-| `ogTitle`        | `string` | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)                                           |
-| `ogDescription`  | `string` | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description)                                     |
-| `ogImage`        | `string` | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                                     |
-| `ogUrl`          | `string` | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                                              |
-| `ogType`         | `OgType` | Open Graph 타입 (og:type). 표준 12개 값 자동완성 + 임의 string 모두 허용                     |
-| `canonicalUrl`   | `string` | SEO를 위한 페이지의 대표 URL (`<link rel="canonical">`)                                      |
-| `ogSiteName`     | `string` | 소셜 미디어 공유를 위한 사이트 이름 (og:site_name)                                           |
-| `ogLocale`       | `string` | 콘텐츠의 언어/지역 코드 (og:locale), 예: `"ko_KR"`, `"en_US"`                                |
-| `twitterSite`    | `string` | 웹사이트의 Twitter 계정 (twitter:site), 예: `"@mysite"`                                      |
-| `twitterCreator` | `string` | 콘텐츠 작성자의 Twitter 계정 (twitter:creator), 예: `"@author"`                              |
-| `robots`         | `string` | 크롤러 색인을 제어하는 robots 메타 태그 콘텐츠, 예: `"noindex,follow"`, `"noindex,nofollow"` |
+| Prop             | Type          | Description                                                                                                                   |
+| ---------------- | ------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| `title`          | `string`      | `document.title`에 설정될 페이지 제목                                                                                         |
+| `description`    | `string`      | SEO를 위한 메타 설명 태그 콘텐츠                                                                                              |
+| `keywords`       | `string`      | SEO를 위한 메타 키워드 태그 콘텐츠                                                                                            |
+| `ogTitle`        | `string`      | 소셜 미디어 공유를 위한 Open Graph 제목 (og:title)                                                                            |
+| `ogDescription`  | `string`      | 소셜 미디어 공유를 위한 Open Graph 설명 (og:description)                                                                      |
+| `ogImage`        | `string`      | 소셜 미디어 공유를 위한 Open Graph 이미지 URL (og:image)                                                                      |
+| `ogUrl`          | `string`      | 소셜 미디어 공유를 위한 Open Graph URL (og:url)                                                                               |
+| `ogType`         | `OgType`      | Open Graph 타입 (og:type). 표준 12개 값 자동완성 + 임의 string 모두 허용                                                      |
+| `canonicalUrl`   | `string`      | SEO를 위한 페이지의 대표 URL (`<link rel="canonical">`)                                                                       |
+| `ogSiteName`     | `string`      | 소셜 미디어 공유를 위한 사이트 이름 (og:site_name)                                                                            |
+| `ogLocale`       | `string`      | 콘텐츠의 언어/지역 코드 (og:locale), 예: `"ko_KR"`, `"en_US"`                                                                 |
+| `twitterSite`    | `string`      | 웹사이트의 Twitter 계정 (twitter:site), 예: `"@mysite"`                                                                       |
+| `twitterCreator` | `string`      | 콘텐츠 작성자의 Twitter 계정 (twitter:creator), 예: `"@author"`                                                               |
+| `twitterCard`    | `TwitterCard` | Twitter 카드 타입 (twitter:card), 예: `"summary"`. 생략 시 Twitter 태그가 하나라도 있으면 `"summary_large_image"`가 기본 적용 |
+| `robots`         | `string`      | 크롤러 색인을 제어하는 robots 메타 태그 콘텐츠, 예: `"noindex,follow"`, `"noindex,nofollow"`                                  |
 
 > **주의:** JS로 주입된 `robots="noindex"`는 JavaScript를 렌더링하는 크롤러(예: Googlebot, 단 지연 있음)만 인식합니다. JS를 실행하지 않는 크롤러(상당수의 봇, 소셜 미디어 프리뷰 봇 등)는 이 태그를 무시하므로 페이지가 여전히 색인될 수 있습니다. 반드시 확실하게 색인에서 제외해야 하는 페이지라면, 서버 측 `X-Robots-Tag: noindex` 헤더를 사용하세요.
 
@@ -147,13 +148,23 @@ function MyPage() {
 
 Open Graph 태그를 설정하면 해당하는 Twitter Card 태그가 자동으로 생성됩니다:
 
-| Open Graph Prop | 생성되는 Twitter 태그                                  |
-| --------------- | ------------------------------------------------------ |
-| `ogTitle`       | `twitter:title`                                        |
-| `ogDescription` | `twitter:description`                                  |
-| `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
+| Open Graph Prop | 생성되는 Twitter 태그 |
+| --------------- | --------------------- |
+| `ogTitle`       | `twitter:title`       |
+| `ogDescription` | `twitter:description` |
+| `ogImage`       | `twitter:image`       |
 
 또한 `twitterSite`와 `twitterCreator`는 Open Graph 대응 항목 없이 `twitter:site`와 `twitter:creator`에 직접 씁니다.
+
+Twitter 태그가 하나라도 기록되면 `twitter:card` 태그도 자동으로 함께 생성됩니다 — X/Twitter는 `twitter:card`가 없는 카드를 무시하기 때문입니다. 기본값은 `summary_large_image`이며 `twitterCard` prop으로 변경할 수 있습니다 (`'summary'` · `'summary_large_image'` · `'app'` · `'player'` 또는 임의 문자열):
+
+```tsx
+<ReactHeadSafe
+  ogTitle="My Page"
+  ogImage="https://example.com/img.jpg"
+  twitterCard="summary"
+/>
+```
 
 ### `OgType` 표준값
 
@@ -192,10 +203,12 @@ prop이 값에서 `undefined`로 변경되면 해당 태그가 제거됩니다. 
 <ReactHeadSafe title="My Page" ogImage={isSharable ? shareImage : undefined} />
 ```
 
+빈 문자열(`""`)도 `undefined`와 완전히 동일하게 동작합니다: 태그를 렌더링하지 않고, 값에서 빈 문자열로 전환되면 기존 태그를 제거합니다. `title=""`이 브라우저 탭을 비우는 일도 없습니다.
+
 ### 추적하지 않는 항목
 
 - **React 마운트 전에 `index.html`에 있던 태그** — `<ReactHeadSafe>`는 마운트 시 이들을 덮어쓰지만, 언마운트 시 **복원하지는 않습니다**. `index.html`은 "기본값" 계층으로, `<ReactHeadSafe>`는 "덮어쓰기" 계층으로 이해해주세요.
-- **동시에 여러 개의 `<ReactHeadSafe>` 인스턴스** — 두 인스턴스가 겹치는 prop을 동시에 설정하는 경우 동작을 보장하지 않습니다. 페이지당 하나의 인스턴스만 사용하세요.
+- **동시에 여러 개의 `<ReactHeadSafe>` 인스턴스** — 두 인스턴스가 겹치는 prop을 설정하면 나중에 마운트된 인스턴스가 우선하며, 한 인스턴스의 언마운트가 다른 인스턴스 소유의 태그를 제거하지 않습니다. 다만 예측 가능한 메타데이터를 위해 페이지당 하나의 인스턴스 사용을 권장합니다.
 
 ## 로컬 개발
 

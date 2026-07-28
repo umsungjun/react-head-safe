@@ -1,5 +1,11 @@
-import { FC, useLayoutEffect } from 'react';
+import { FC, useEffect, useLayoutEffect } from 'react';
 import { type ReactHeadSafeProps } from './types';
+
+// Falls back to useEffect during SSR to avoid React's
+// "useLayoutEffect does nothing on the server" warning.
+// The library stays CSR-only: no tags are ever emitted on the server.
+const useIsomorphicLayoutEffect =
+  typeof document !== 'undefined' ? useLayoutEffect : useEffect;
 
 /**
  * @description
@@ -33,103 +39,109 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
   ogLocale,
   twitterSite,
   twitterCreator,
+  twitterCard,
   robots,
 }) => {
-  useLayoutEffect(() => {
-    // Track selectors for meta/link tags inserted in this effect run.
-    // Cleanup only removes tags we inserted, preventing stale tags on
-    // unmount or when a prop transitions to undefined.
-    const insertedSelectors: string[] = [];
+  useIsomorphicLayoutEffect(() => {
+    // Track the exact elements inserted in this effect run.
+    // Cleanup removes only these references, so it is a no-op for tags that
+    // another ReactHeadSafe instance has since replaced — preventing one
+    // instance's unmount from deleting a tag it no longer owns.
+    const insertedElements: HTMLElement[] = [];
+
+    // Empty strings are treated the same as undefined: no tag is rendered.
 
     // Update title
     // NOTE: document.title is intentionally not restored on cleanup —
     // the next page's ReactHeadSafe typically overwrites it immediately.
-    if (title !== undefined) {
+    if (title) {
       document.title = title;
     }
 
     // Update description meta tag
-    if (description !== undefined) {
-      updateMetaTag('name', 'description', description);
-      insertedSelectors.push('meta[name="description"]');
+    if (description) {
+      insertedElements.push(updateMetaTag('name', 'description', description));
     }
 
     // Update keywords meta tag
-    if (keywords !== undefined) {
-      updateMetaTag('name', 'keywords', keywords);
-      insertedSelectors.push('meta[name="keywords"]');
+    if (keywords) {
+      insertedElements.push(updateMetaTag('name', 'keywords', keywords));
     }
 
     // Update Open Graph tags and Twitter tags
-    if (ogTitle !== undefined) {
-      updateMetaTag('property', 'og:title', ogTitle);
-      updateMetaTag('name', 'twitter:title', ogTitle);
-      insertedSelectors.push(
-        'meta[property="og:title"]',
-        'meta[name="twitter:title"]'
+    if (ogTitle) {
+      insertedElements.push(
+        updateMetaTag('property', 'og:title', ogTitle),
+        updateMetaTag('name', 'twitter:title', ogTitle)
       );
     }
 
-    if (ogDescription !== undefined) {
-      updateMetaTag('property', 'og:description', ogDescription);
-      updateMetaTag('name', 'twitter:description', ogDescription);
-      insertedSelectors.push(
-        'meta[property="og:description"]',
-        'meta[name="twitter:description"]'
+    if (ogDescription) {
+      insertedElements.push(
+        updateMetaTag('property', 'og:description', ogDescription),
+        updateMetaTag('name', 'twitter:description', ogDescription)
       );
     }
 
-    if (ogImage !== undefined) {
-      updateMetaTag('property', 'og:image', ogImage);
-      updateMetaTag('name', 'twitter:image', ogImage);
-      updateMetaTag('name', 'twitter:card', 'summary_large_image');
-      insertedSelectors.push(
-        'meta[property="og:image"]',
-        'meta[name="twitter:image"]',
-        'meta[name="twitter:card"]'
+    if (ogImage) {
+      insertedElements.push(
+        updateMetaTag('property', 'og:image', ogImage),
+        updateMetaTag('name', 'twitter:image', ogImage)
       );
     }
 
-    if (ogUrl !== undefined) {
-      updateMetaTag('property', 'og:url', ogUrl);
-      insertedSelectors.push('meta[property="og:url"]');
+    if (ogUrl) {
+      insertedElements.push(updateMetaTag('property', 'og:url', ogUrl));
     }
 
-    if (ogType !== undefined) {
-      updateMetaTag('property', 'og:type', ogType);
-      insertedSelectors.push('meta[property="og:type"]');
+    if (ogType) {
+      insertedElements.push(updateMetaTag('property', 'og:type', ogType));
     }
 
     // Update canonical URL
-    if (canonicalUrl !== undefined) {
-      updateLinkTag('canonical', canonicalUrl);
-      insertedSelectors.push('link[rel="canonical"]');
+    if (canonicalUrl) {
+      insertedElements.push(updateLinkTag('canonical', canonicalUrl));
     }
 
-    if (ogSiteName !== undefined) {
-      updateMetaTag('property', 'og:site_name', ogSiteName);
-      insertedSelectors.push('meta[property="og:site_name"]');
+    if (ogSiteName) {
+      insertedElements.push(
+        updateMetaTag('property', 'og:site_name', ogSiteName)
+      );
     }
 
-    if (ogLocale !== undefined) {
-      updateMetaTag('property', 'og:locale', ogLocale);
-      insertedSelectors.push('meta[property="og:locale"]');
+    if (ogLocale) {
+      insertedElements.push(updateMetaTag('property', 'og:locale', ogLocale));
     }
 
-    if (twitterSite !== undefined) {
-      updateMetaTag('name', 'twitter:site', twitterSite);
-      insertedSelectors.push('meta[name="twitter:site"]');
+    if (twitterSite) {
+      insertedElements.push(updateMetaTag('name', 'twitter:site', twitterSite));
     }
 
-    if (twitterCreator !== undefined) {
-      updateMetaTag('name', 'twitter:creator', twitterCreator);
-      insertedSelectors.push('meta[name="twitter:creator"]');
+    if (twitterCreator) {
+      insertedElements.push(
+        updateMetaTag('name', 'twitter:creator', twitterCreator)
+      );
+    }
+
+    // Emit twitter:card whenever any Twitter tag is written — X/Twitter
+    // ignores cards that lack it. Defaults to "summary_large_image" and can
+    // be overridden via the twitterCard prop.
+    const hasTwitterTag = Boolean(
+      ogTitle || ogDescription || ogImage || twitterSite || twitterCreator
+    );
+    if (twitterCard || hasTwitterTag) {
+      insertedElements.push(
+        updateMetaTag(
+          'name',
+          'twitter:card',
+          twitterCard || 'summary_large_image'
+        )
+      );
     }
 
     // Update robots meta tag (controls crawler indexing, e.g. "noindex,follow")
-    if (robots !== undefined) {
-      updateMetaTag('name', 'robots', robots);
-      insertedSelectors.push('meta[name="robots"]');
+    if (robots) {
+      insertedElements.push(updateMetaTag('name', 'robots', robots));
     }
 
     // Cleanup: remove every tag this effect inserted.
@@ -137,8 +149,8 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
     //   (handles prop → undefined transitions).
     // - On unmount: final run, preventing stale metadata across pages.
     return () => {
-      insertedSelectors.forEach((selector) => {
-        document.querySelector(selector)?.remove();
+      insertedElements.forEach((element) => {
+        element.remove();
       });
     };
   }, [
@@ -155,6 +167,7 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
     ogLocale,
     twitterSite,
     twitterCreator,
+    twitterCard,
     robots,
   ]);
 
@@ -163,40 +176,38 @@ export const ReactHeadSafe: FC<ReactHeadSafeProps> = ({
 
 /**
  * Updates or creates a link tag in the document head.
- * Removes existing tag with the same rel to prevent duplicates.
+ * Removes every existing tag with the same rel (case-insensitive) to
+ * prevent duplicates, then returns the newly created element.
  */
-function updateLinkTag(rel: string, href: string): void {
-  const existingTag = document.querySelector(`link[rel="${rel}"]`);
-  if (existingTag) {
-    existingTag.remove();
-  }
+function updateLinkTag(rel: string, href: string): HTMLLinkElement {
+  document
+    .querySelectorAll(`link[rel="${rel}" i]`)
+    .forEach((tag) => tag.remove());
 
   const linkTag = document.createElement('link');
   linkTag.setAttribute('rel', rel);
   linkTag.setAttribute('href', href);
   document.head.appendChild(linkTag);
+  return linkTag;
 }
 
 /**
  * Updates or creates a meta tag in the document head.
- * Removes existing tag with the same identifier to prevent duplicates.
+ * Removes every existing tag with the same identifier (case-insensitive) to
+ * prevent duplicates, then returns the newly created element.
  */
 function updateMetaTag(
   attribute: 'name' | 'property',
   identifier: string,
   content: string
-): void {
-  // Remove existing meta tag with the same identifier
-  const existingTag = document.querySelector(
-    `meta[${attribute}="${identifier}"]`
-  );
-  if (existingTag) {
-    existingTag.remove();
-  }
+): HTMLMetaElement {
+  document
+    .querySelectorAll(`meta[${attribute}="${identifier}" i]`)
+    .forEach((tag) => tag.remove());
 
-  // Create and append new meta tag
   const metaTag = document.createElement('meta');
   metaTag.setAttribute(attribute, identifier);
   metaTag.setAttribute('content', content);
   document.head.appendChild(metaTag);
+  return metaTag;
 }

@@ -24,30 +24,32 @@ pnpm vitest run -t "test name pattern"
 ### Core flow
 
 1. `src/types.ts` — defines `ReactHeadSafeProps` (all optional strings)
-2. `src/ReactHeadSafe.tsx` — the only component; uses `useLayoutEffect` to synchronously mutate the DOM before paint
-3. `src/index.ts` — re-exports the component and its props type
+2. `src/ReactHeadSafe.tsx` — the only component; uses a `useIsomorphicLayoutEffect` (layout effect in the browser, `useEffect` fallback during SSR to silence React's warning) to synchronously mutate the DOM before paint
+3. `src/index.ts` — re-exports the component and its types
 
-The component returns `null` (no DOM output). The `updateMetaTag()` helper removes any existing matching `<meta>` element before inserting the new one, preventing duplicates.
+The component returns `null` (no DOM output). The `updateMetaTag()`/`updateLinkTag()` helpers remove **every** existing matching element (case-insensitive attribute match) before inserting the new one, preventing duplicates even when `index.html` ships more than one static tag.
 
-The `useLayoutEffect` tracks the selectors it inserts in a local `insertedSelectors` array and returns a cleanup function that removes them. This runs when deps change (handling prop → `undefined` transitions) and on unmount (preventing stale metadata across SPA page transitions). `document.title` is intentionally not restored on cleanup.
+The effect tracks the exact elements it creates in a local `insertedElements` array and returns a cleanup that calls `element.remove()` on each. Because cleanup removes element references (not selectors), unmounting one instance never deletes a tag that another instance has since replaced. Cleanup runs when deps change (handling prop → `undefined` transitions) and on unmount (preventing stale metadata across SPA page transitions). `document.title` is intentionally not restored on cleanup. Empty strings are treated the same as `undefined` — falsy values render nothing.
 
 Most Twitter Card tags are automatically derived from OG props:
 
-| OG prop           | Also writes                                                           |
-| ----------------- | --------------------------------------------------------------------- |
-| `ogTitle`         | `twitter:title`                                                       |
-| `ogDescription`   | `twitter:description`                                                 |
-| `ogImage`         | `twitter:image` + `twitter:card` (hardcoded to `summary_large_image`) |
-| `ogUrl`, `ogType` | _(no Twitter equivalent)_                                             |
+| OG prop           | Also writes               |
+| ----------------- | ------------------------- |
+| `ogTitle`         | `twitter:title`           |
+| `ogDescription`   | `twitter:description`     |
+| `ogImage`         | `twitter:image`           |
+| `ogUrl`, `ogType` | _(no Twitter equivalent)_ |
 
 `twitterSite` and `twitterCreator` are standalone Twitter-only props with no Open Graph equivalent — they write directly to `twitter:site` and `twitter:creator`.
+
+`twitter:card` is emitted whenever any Twitter tag is written (X/Twitter ignores cards without it), defaulting to `summary_large_image`; the `twitterCard` prop overrides the card type.
 
 ### Adding a new prop
 
 When adding a new meta tag prop, update all four of these locations:
 
 1. `src/types.ts` — add the prop to `ReactHeadSafeProps`
-2. `src/ReactHeadSafe.tsx` — destructure the prop, add `updateMetaTag()` call(s) inside `useLayoutEffect`, **push the corresponding selector(s) to `insertedSelectors` so cleanup removes them**, and add the prop to the dependency array
+2. `src/ReactHeadSafe.tsx` — destructure the prop, add `updateMetaTag()` call(s) inside the effect, **push the returned element(s) to `insertedElements` so cleanup removes them**, and add the prop to the dependency array
 3. `src/test/ReactHeadSafe.test.tsx` — add tests (creation, update on re-render, duplicate prevention, **removal on unmount**, **removal when prop transitions to `undefined`**)
 4. `README.md` and `README.ko.md` — add the prop to the API Reference table
 
