@@ -127,22 +127,23 @@ That's it! The component will automatically:
 
 ### ReactHeadSafeProps
 
-| Prop             | Type     | Description                                                                                             |
-| ---------------- | -------- | ------------------------------------------------------------------------------------------------------- |
-| `title`          | `string` | The page title that will be set in the `document.title`                                                 |
-| `description`    | `string` | The meta description tag content for SEO                                                                |
-| `keywords`       | `string` | The meta keywords tag content for SEO                                                                   |
-| `ogTitle`        | `string` | The Open Graph title (og:title) for social media sharing                                                |
-| `ogDescription`  | `string` | The Open Graph description (og:description) for social media sharing                                    |
-| `ogImage`        | `string` | The Open Graph image URL (og:image) for social media sharing                                            |
-| `ogUrl`          | `string` | The canonical URL of your object that will be used as its permanent ID in the graph (og:url)            |
-| `ogType`         | `OgType` | The type of your object (og:type). Autocompletes 12 standard OG values; also accepts any string.        |
-| `canonicalUrl`   | `string` | The canonical URL of the page for SEO (`<link rel="canonical">`)                                        |
-| `ogSiteName`     | `string` | The site name for social media sharing (og:site_name)                                                   |
-| `ogLocale`       | `string` | The locale of the content (og:locale), e.g. `"en_US"`, `"ko_KR"`                                        |
-| `twitterSite`    | `string` | The Twitter @username of the website (twitter:site), e.g. `"@mysite"`                                   |
-| `twitterCreator` | `string` | The Twitter @username of the content author (twitter:creator), e.g. `"@author"`                         |
-| `robots`         | `string` | The robots meta tag content controlling crawler indexing, e.g. `"noindex,follow"`, `"noindex,nofollow"` |
+| Prop             | Type          | Description                                                                                                                                   |
+| ---------------- | ------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `title`          | `string`      | The page title that will be set in the `document.title`                                                                                       |
+| `description`    | `string`      | The meta description tag content for SEO                                                                                                      |
+| `keywords`       | `string`      | The meta keywords tag content for SEO                                                                                                         |
+| `ogTitle`        | `string`      | The Open Graph title (og:title) for social media sharing                                                                                      |
+| `ogDescription`  | `string`      | The Open Graph description (og:description) for social media sharing                                                                          |
+| `ogImage`        | `string`      | The Open Graph image URL (og:image) for social media sharing                                                                                  |
+| `ogUrl`          | `string`      | The canonical URL of your object that will be used as its permanent ID in the graph (og:url)                                                  |
+| `ogType`         | `OgType`      | The type of your object (og:type). Autocompletes 12 standard OG values; also accepts any string.                                              |
+| `canonicalUrl`   | `string`      | The canonical URL of the page for SEO (`<link rel="canonical">`)                                                                              |
+| `ogSiteName`     | `string`      | The site name for social media sharing (og:site_name)                                                                                         |
+| `ogLocale`       | `string`      | The locale of the content (og:locale), e.g. `"en_US"`, `"ko_KR"`                                                                              |
+| `twitterSite`    | `string`      | The Twitter @username of the website (twitter:site), e.g. `"@mysite"`                                                                         |
+| `twitterCreator` | `string`      | The Twitter @username of the content author (twitter:creator), e.g. `"@author"`                                                               |
+| `twitterCard`    | `TwitterCard` | The Twitter card type (twitter:card), e.g. `"summary"`. When omitted, defaults to `"summary_large_image"` whenever any Twitter tag is written |
+| `robots`         | `string`      | The robots meta tag content controlling crawler indexing, e.g. `"noindex,follow"`, `"noindex,nofollow"`                                       |
 
 > **Warning:** A JS-injected `robots="noindex"` is only honored by crawlers that render JavaScript (e.g. Googlebot, with delay). Non-JS crawlers (many bots, social preview crawlers) ignore it, so the page may still be indexed. For pages that must be reliably excluded from indexing, use a server-side `X-Robots-Tag: noindex` header instead.
 
@@ -150,13 +151,23 @@ That's it! The component will automatically:
 
 When you set Open Graph tags, the corresponding Twitter Card tags are automatically generated:
 
-| Open Graph Prop | Twitter Tag Generated                                  |
-| --------------- | ------------------------------------------------------ |
-| `ogTitle`       | `twitter:title`                                        |
-| `ogDescription` | `twitter:description`                                  |
-| `ogImage`       | `twitter:image` + `twitter:card` (summary_large_image) |
+| Open Graph Prop | Twitter Tag Generated |
+| --------------- | --------------------- |
+| `ogTitle`       | `twitter:title`       |
+| `ogDescription` | `twitter:description` |
+| `ogImage`       | `twitter:image`       |
 
 In addition, `twitterSite` and `twitterCreator` write directly to `twitter:site` and `twitter:creator` with no Open Graph equivalent.
+
+Whenever any Twitter tag is written, a `twitter:card` tag is emitted automatically as well — X/Twitter ignores cards that lack it. It defaults to `summary_large_image` and can be overridden with the `twitterCard` prop (`'summary'` · `'summary_large_image'` · `'app'` · `'player'`, or any custom string):
+
+```tsx
+<ReactHeadSafe
+  ogTitle="My Page"
+  ogImage="https://example.com/img.jpg"
+  twitterCard="summary"
+/>
+```
 
 ### `OgType` standard values
 
@@ -195,10 +206,12 @@ If a prop transitions from a value to `undefined` on re-render, the correspondin
 <ReactHeadSafe title="My Page" ogImage={isSharable ? shareImage : undefined} />
 ```
 
+An empty string (`""`) behaves exactly like `undefined`: no tag is rendered, and an existing tag is removed on the transition. `title=""` never blanks the browser tab.
+
 ### What is NOT tracked
 
 - **Tags present in `index.html` before React mounts** — `<ReactHeadSafe>` overwrites them on mount but does **not** restore them on unmount. Treat `index.html` as the "default" layer and `<ReactHeadSafe>` as the "override" layer.
-- **Multiple simultaneous instances** — behavior is not guaranteed when two `<ReactHeadSafe>` instances target overlapping props at the same time. Use a single instance per page.
+- **Multiple simultaneous instances** — when two `<ReactHeadSafe>` instances target overlapping props, the last-mounted instance wins, and unmounting one instance never removes a tag currently owned by another. Still, prefer a single instance per page for predictable metadata.
 
 ## Local Development
 
