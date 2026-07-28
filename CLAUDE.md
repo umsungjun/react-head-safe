@@ -11,6 +11,9 @@ pnpm test:watch     # Run tests in watch mode
 pnpm test:coverage  # Generate coverage report
 pnpm test:ui        # Interactive Vitest UI
 pnpm format         # Format with Prettier
+pnpm format:check   # Verify formatting without writing (used in CI)
+pnpm lint           # ESLint (flat config, includes react-hooks rules)
+pnpm typecheck      # tsc --noEmit
 pnpm example        # Run the basic example app
 
 # Run a specific test by name pattern
