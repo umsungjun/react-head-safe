@@ -39,6 +39,9 @@
     "build": "vite build && node -e \"require('fs').copyFileSync('dist/index.d.ts','dist/index.d.mts')\"",
     "prepublishOnly": "pnpm run build",
     "format": "prettier --write \"src/**/*.{ts,tsx}\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\"",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "example": "cd examples/basic && pnpm install && pnpm dev",
     "test": "vitest run",
     "test:watch": "vitest",
@@ -49,6 +52,7 @@
     "react": "^17.0.0 || ^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.1",
     "@types/node": "^22.10.5",
@@ -56,11 +60,14 @@
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^5.1.2",
     "@vitest/coverage-v8": "^4.0.17",
+    "eslint": "^10.8.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
     "jsdom": "^27.4.0",
     "prettier": "^3.7.4",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "typescript": "^5.9.3",
+    "typescript-eslint": "^8.65.0",
     "vite": "^6.0.7",
     "vite-plugin-dts": "^4.4.2",
     "vitest": "^4.0.17"
