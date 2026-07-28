@@ -25,6 +25,9 @@ export default defineConfig({
       include: ['src/**/*.ts', 'src/**/*.tsx'],
       exclude: ['src/test/**'],
       outDir: 'dist',
+      // Bundle declarations into a single index.d.ts with no relative imports,
+      // so it can be safely copied to index.d.mts for the ESM entry
+      rollupTypes: true,
     }),
   ],
 });

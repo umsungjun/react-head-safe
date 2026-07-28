@@ -5,7 +5,6 @@
     "lib": ["ES2020", "DOM"],
     "jsx": "react",
     "declaration": true,
-    "declarationMap": true,
     "outDir": "./dist",
     "rootDir": "./src",
     "strict": true,
