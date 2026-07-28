@@ -1,2 +1,2 @@
 export { ReactHeadSafe } from './ReactHeadSafe';
-export type { ReactHeadSafeProps, OgType } from './types';
+export type { ReactHeadSafeProps, OgType, TwitterCard } from './types';

@@ -21,6 +21,21 @@ export type OgType =
   | 'music.radio_station'
   | (string & {});
 
+/**
+ * Standard Twitter Card types.
+ *
+ * Provides IDE autocompletion for the 4 well-known values while still
+ * accepting any string for forward compatibility (via `(string & {})`).
+ *
+ * @see https://developer.x.com/en/docs/x-for-websites/cards/overview/abouts-cards
+ */
+export type TwitterCard =
+  | 'summary'
+  | 'summary_large_image'
+  | 'app'
+  | 'player'
+  | (string & {});
+
 export interface ReactHeadSafeProps {
   /** The page title that will be set in the document.title */
   title?: string;
@@ -48,12 +63,8 @@ export interface ReactHeadSafeProps {
   twitterSite?: string;
   /** The Twitter @username of the content author (twitter:creator), e.g. "@author" */
   twitterCreator?: string;
-  /**
-   * The robots meta tag content controlling crawler indexing, e.g. "noindex,follow", "noindex,nofollow".
-   *
-   * Note: a JS-injected `noindex` is only honored by crawlers that render JavaScript
-   * (e.g. Googlebot, with delay). Non-JS crawlers ignore it. For pages that must be
-   * reliably excluded, use a server-side `X-Robots-Tag: noindex` header instead.
-   */
+  /** The Twitter card type (twitter:card). Defaults to "summary_large_image" whenever any Twitter tag is written */
+  twitterCard?: TwitterCard;
+  /** The robots meta tag content, e.g. "noindex,follow". Only honored by JS-rendering crawlers — for guaranteed exclusion use a server-side X-Robots-Tag header */
   robots?: string;
 }

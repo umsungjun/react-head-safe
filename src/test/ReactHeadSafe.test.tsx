@@ -2,6 +2,7 @@ import React from 'react';
 import { describe, it, expect, beforeEach } from 'vitest';
 import { render } from '@testing-library/react';
 import { ReactHeadSafe } from '../ReactHeadSafe';
+import { ReactHeadSafe as BarrelReactHeadSafe } from '../index';
 
 describe('ReactHeadSafe', () => {
   beforeEach(() => {
@@ -857,6 +858,223 @@ describe('ReactHeadSafe', () => {
       const tags = document.querySelectorAll('meta[name="description"]');
       expect(tags).toHaveLength(1);
       expect(tags[0].getAttribute('content')).toBe('v10');
+    });
+  });
+
+  describe('pre-existing tags in document head', () => {
+    it('should remove ALL pre-existing duplicate tags before inserting', () => {
+      // Simulates an index.html that ships more than one static tag
+      document.head.innerHTML =
+        '<meta name="description" content="static 1" />' +
+        '<meta name="description" content="static 2" />';
+
+      render(<ReactHeadSafe description="Fresh" />);
+
+      const tags = document.querySelectorAll('meta[name="description"]');
+      expect(tags).toHaveLength(1);
+      expect(tags[0].getAttribute('content')).toBe('Fresh');
+    });
+
+    it('should replace pre-existing tags regardless of attribute value casing', () => {
+      document.head.innerHTML = '<meta name="ROBOTS" content="index,follow" />';
+
+      render(<ReactHeadSafe robots="noindex,nofollow" />);
+
+      const tags = document.querySelectorAll('meta[name="robots" i]');
+      expect(tags).toHaveLength(1);
+      expect(tags[0].getAttribute('content')).toBe('noindex,nofollow');
+    });
+
+    it('should remove ALL pre-existing duplicate link tags before inserting', () => {
+      document.head.innerHTML =
+        '<link rel="canonical" href="https://old-1.example.com" />' +
+        '<link rel="canonical" href="https://old-2.example.com" />';
+
+      render(<ReactHeadSafe canonicalUrl="https://example.com" />);
+
+      const tags = document.querySelectorAll('link[rel="canonical"]');
+      expect(tags).toHaveLength(1);
+      expect(tags[0].getAttribute('href')).toBe('https://example.com');
+    });
+  });
+
+  describe('multiple instances', () => {
+    it('should not let one instance unmount a tag another instance owns', () => {
+      const first = render(<ReactHeadSafe description="First" />);
+      render(<ReactHeadSafe description="Second" />);
+
+      // The second instance replaced the first instance's tag
+      let tags = document.querySelectorAll('meta[name="description"]');
+      expect(tags).toHaveLength(1);
+      expect(tags[0].getAttribute('content')).toBe('Second');
+
+      // Unmounting the first instance must not delete the survivor's tag
+      first.unmount();
+
+      tags = document.querySelectorAll('meta[name="description"]');
+      expect(tags).toHaveLength(1);
+      expect(tags[0].getAttribute('content')).toBe('Second');
+    });
+
+    it('should let the last-mounted sibling win for overlapping props', () => {
+      render(
+        <>
+          <ReactHeadSafe description="From layout" />
+          <ReactHeadSafe description="From page" />
+        </>
+      );
+
+      const tags = document.querySelectorAll('meta[name="description"]');
+      expect(tags).toHaveLength(1);
+      expect(tags[0].getAttribute('content')).toBe('From page');
+    });
+  });
+
+  describe('React.StrictMode', () => {
+    it('should keep tags intact after StrictMode double-invokes effects', () => {
+      render(
+        <React.StrictMode>
+          <ReactHeadSafe
+            title="Strict Title"
+            description="Strict Desc"
+            ogTitle="Strict OG"
+          />
+        </React.StrictMode>
+      );
+
+      expect(document.title).toBe('Strict Title');
+
+      const descTags = document.querySelectorAll('meta[name="description"]');
+      expect(descTags).toHaveLength(1);
+      expect(descTags[0].getAttribute('content')).toBe('Strict Desc');
+
+      expect(
+        document.querySelectorAll('meta[property="og:title"]')
+      ).toHaveLength(1);
+    });
+
+    it('should clean up correctly on unmount under StrictMode', () => {
+      const { unmount } = render(
+        <React.StrictMode>
+          <ReactHeadSafe description="Strict Desc" />
+        </React.StrictMode>
+      );
+
+      unmount();
+
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('empty string props', () => {
+    it('should not render tags for empty string values', () => {
+      render(<ReactHeadSafe description="" robots="" ogTitle="" />);
+
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="robots"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[property="og:title"]')
+      ).not.toBeInTheDocument();
+      expect(
+        document.querySelector('meta[name="twitter:card"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should not blank document.title for an empty string', () => {
+      document.title = 'Existing Title';
+      render(<ReactHeadSafe title="" />);
+      expect(document.title).toBe('Existing Title');
+    });
+
+    it('should remove a tag when prop transitions to an empty string', () => {
+      const { rerender } = render(<ReactHeadSafe description="Initial" />);
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).toBeInTheDocument();
+
+      rerender(<ReactHeadSafe description="" />);
+
+      expect(
+        document.querySelector('meta[name="description"]')
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('twitter:card emission', () => {
+    it('should emit default twitter:card when a twitter tag is written without ogImage', () => {
+      render(<ReactHeadSafe ogTitle="Title Only" />);
+
+      const card = document.querySelector('meta[name="twitter:card"]');
+      expect(card).toBeInTheDocument();
+      expect(card?.getAttribute('content')).toBe('summary_large_image');
+    });
+
+    it('should emit twitter:card for standalone twitter props', () => {
+      render(<ReactHeadSafe twitterSite="@mysite" />);
+
+      expect(
+        document
+          .querySelector('meta[name="twitter:card"]')
+          ?.getAttribute('content')
+      ).toBe('summary_large_image');
+    });
+
+    it('should override the card type via the twitterCard prop', () => {
+      render(
+        <ReactHeadSafe
+          ogImage="https://example.com/img.jpg"
+          twitterCard="summary"
+        />
+      );
+
+      const tags = document.querySelectorAll('meta[name="twitter:card"]');
+      expect(tags).toHaveLength(1);
+      expect(tags[0].getAttribute('content')).toBe('summary');
+    });
+
+    it('should emit twitter:card when only twitterCard is provided', () => {
+      render(<ReactHeadSafe twitterCard="app" />);
+
+      expect(
+        document
+          .querySelector('meta[name="twitter:card"]')
+          ?.getAttribute('content')
+      ).toBe('app');
+    });
+
+    it('should not emit twitter:card when no twitter tag is written', () => {
+      render(
+        <ReactHeadSafe title="T" description="D" ogUrl="https://example.com" />
+      );
+
+      expect(
+        document.querySelector('meta[name="twitter:card"]')
+      ).not.toBeInTheDocument();
+    });
+
+    it('should remove twitter:card when twitterCard becomes undefined', () => {
+      const { rerender } = render(<ReactHeadSafe twitterCard="summary" />);
+      expect(
+        document.querySelector('meta[name="twitter:card"]')
+      ).toBeInTheDocument();
+
+      rerender(<ReactHeadSafe />);
+
+      expect(
+        document.querySelector('meta[name="twitter:card"]')
+      ).not.toBeInTheDocument();
+    });
+  });
+
+  describe('package entry point', () => {
+    it('should export the same component from the barrel (src/index.ts)', () => {
+      expect(BarrelReactHeadSafe).toBe(ReactHeadSafe);
     });
   });
 });
