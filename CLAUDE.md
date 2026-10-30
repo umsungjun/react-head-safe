@@ -79,4 +79,4 @@ Tests run in `jsdom`. The setup file (`src/test/setup.ts`) resets `document.head
 
 ### Package manager
 
-This project uses `pnpm` and requires Node 20.x (see `.nvmrc`). Use `pnpm` for all install/run commands, not `npm` or `yarn`.
+This project uses `pnpm` and requires Node 24.x (see `.nvmrc`). Use `pnpm` for all install/run commands, not `npm` or `yarn`.
