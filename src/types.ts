@@ -30,11 +30,7 @@ export type OgType =
  * @see https://developer.x.com/en/docs/x-for-websites/cards/overview/abouts-cards
  */
 export type TwitterCard =
-  | 'summary'
-  | 'summary_large_image'
-  | 'app'
-  | 'player'
-  | (string & {});
+  'summary' | 'summary_large_image' | 'app' | 'player' | (string & {});
 
 export interface ReactHeadSafeProps {
   /** The page title that will be set in the document.title */
