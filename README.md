@@ -263,7 +263,7 @@ pnpm example
 
 ## License
 
-[MIT](LICENSE) © [umsungjun](https://github.com/umsungjun)
+[MIT](LICENSE) © [umsungjun](https://umsungjun.com/en)
 
 ---
 

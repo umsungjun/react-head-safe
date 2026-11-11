@@ -260,7 +260,7 @@ pnpm example
 
 ## 라이선스
 
-[MIT](LICENSE) © [umsungjun](https://github.com/umsungjun)
+[MIT](LICENSE) © [umsungjun](https://umsungjun.com)
 
 ---
 
